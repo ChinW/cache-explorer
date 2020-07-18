@@ -11,10 +11,10 @@
   "author": "chi",
   "license": "ISC",
   "dependencies": {
+    "@chiw/hazelcast-client": "^4.0.4",
     "ag-grid-community": "^23.2.1",
     "ag-grid-enterprise": "^23.2.1",
     "ag-grid-react": "^23.2.1",
-    "@chiw/hazelcast-client": "^4.0.3",
     "lodash": "^4.17.19",
     "next": "^9.4.4",
     "normalize.css": "^8.0.1",
