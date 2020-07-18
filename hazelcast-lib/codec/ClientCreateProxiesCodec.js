@@ -1,0 +1,44 @@
+"use strict";
+/*
+ * Copyright (c) 2008-2020, Hazelcast, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+/*tslint:disable:max-line-length*/
+var BitsUtil_1 = require("../BitsUtil");
+var ClientMessage_1 = require("../ClientMessage");
+var EntryListCodec_1 = require("./builtin/EntryListCodec");
+var StringCodec_1 = require("./builtin/StringCodec");
+// hex: 0x000E00
+var REQUEST_MESSAGE_TYPE = 3584;
+// hex: 0x000E01
+var RESPONSE_MESSAGE_TYPE = 3585;
+var REQUEST_INITIAL_FRAME_SIZE = ClientMessage_1.PARTITION_ID_OFFSET + BitsUtil_1.BitsUtil.INT_SIZE_IN_BYTES;
+var ClientCreateProxiesCodec = /** @class */ (function () {
+    function ClientCreateProxiesCodec() {
+    }
+    ClientCreateProxiesCodec.encodeRequest = function (proxies) {
+        var clientMessage = ClientMessage_1.ClientMessage.createForEncode();
+        clientMessage.setRetryable(false);
+        var initialFrame = ClientMessage_1.Frame.createInitialFrame(REQUEST_INITIAL_FRAME_SIZE);
+        clientMessage.addFrame(initialFrame);
+        clientMessage.setMessageType(REQUEST_MESSAGE_TYPE);
+        clientMessage.setPartitionId(-1);
+        EntryListCodec_1.EntryListCodec.encode(clientMessage, proxies, StringCodec_1.StringCodec.encode, StringCodec_1.StringCodec.encode);
+        return clientMessage;
+    };
+    return ClientCreateProxiesCodec;
+}());
+exports.ClientCreateProxiesCodec = ClientCreateProxiesCodec;
+//# sourceMappingURL=ClientCreateProxiesCodec.js.map
