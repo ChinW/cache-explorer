@@ -1,6 +1,6 @@
-import { Client, Config, IMap } from "hazelcast-client-nodejs/lib/index.js";
-import { ReadOnlyLazyList } from "hazelcast-client-nodejs/lib/core/ReadOnlyLazyList.js";
-import { SqlPredicate } from "hazelcast-client-nodejs/lib/serialization/DefaultPredicates.js";
+import { Client, Config, IMap } from "@chiw/hazelcast-client/lib/index.js";
+import { ReadOnlyLazyList } from "@chiw/hazelcast-client/lib/core/ReadOnlyLazyList.js";
+import { SqlPredicate } from "@chiw/hazelcast-client/lib/serialization/DefaultPredicates.js";
 import { CachePortableFactory } from "./cacheFactory/portableFactory";
 import { FACTORY_ID } from "./cacheFactory/cacheConstants";
 
