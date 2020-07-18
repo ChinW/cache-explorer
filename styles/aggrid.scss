@@ -1,0 +1,19 @@
+@import "~ag-grid-community/src/styles/ag-grid.scss";
+@import "~ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin";
+
+.ag-theme-alpine {
+    @include ag-theme-alpine((
+        font-size: 12px,
+        grid-size: 2px,
+        row-height: 18px,
+        header-height: 24px   
+    ));
+
+    .ag-row {
+        font-size: 12px;
+    }
+    // .ag-header {
+    //     // or write CSS selectors to make customisations beyond what the parameters support
+    //     text-style: italic;
+    // }
+}
