@@ -1,4 +1,4 @@
-import { PortableReader, PortableWriter } from "../../hazelcast-lib/serialization/portable/PortableSerializer";
+import { PortableReader, PortableWriter } from "@chiw/hazelcast-client/lib/serialization/portable/PortableSerializer";
 
 export class BaseType {
     readPortable = (input: PortableReader) => {

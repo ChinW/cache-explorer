@@ -1,6 +1,6 @@
 import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from "./cacheConstants";
-import { Portable } from "../../hazelcast-lib/serialization/Serializable";
-import { PortableReader, PortableWriter } from "../../hazelcast-lib/serialization/portable/PortableSerializer";
+import { Portable } from "@chiw/hazelcast-client/lib/serialization/Serializable";
+import { PortableReader, PortableWriter } from "@chiw/hazelcast-client/lib/serialization/portable/PortableSerializer";
 import { BaseType } from "./base";
 
 export class Order extends BaseType implements Portable, CacheType {

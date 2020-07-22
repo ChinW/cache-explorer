@@ -1,7 +1,6 @@
 /// <reference types="next" />
 /// <reference types="next/types/global" />
 
-
 type Env = "prod" | "qa" | "dev";
 
 interface CacheQuery {

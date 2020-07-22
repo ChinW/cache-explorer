@@ -4,10 +4,6 @@ import { SqlPredicate } from "@chiw/hazelcast-client/lib/serialization/DefaultPr
 import { CachePortableFactory } from "./cacheFactory/portableFactory";
 import { FACTORY_ID } from "./cacheFactory/cacheConstants";
 
-interface ObjectType {
-  [key: string]: any;
-}
-
 export const FACTORIES = {
   [FACTORY_ID]: new CachePortableFactory(),
 };

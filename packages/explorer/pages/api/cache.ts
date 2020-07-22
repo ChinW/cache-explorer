@@ -3,6 +3,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import querystring from 'querystring';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+console.log('cache api');
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const query: CacheQuery = JSON.parse(req.body);
