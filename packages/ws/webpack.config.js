@@ -1,11 +1,10 @@
 const path = require("path");
-const webpack = require("webpack");
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = {
   entry: {
-    ws: "./packages/ws/index.ts",
+    ws: "./src/index.ts",
   },
   mode: "development",
   target: "node",
@@ -13,7 +12,10 @@ module.exports = {
     rules: [
       {
         test: /\.(j|t)sx?$/,
-        include: [path.resolve(__dirname, "./packages/ws")],
+        include: [
+          path.resolve(__dirname, "./src/"),
+          path.resolve(__dirname, "./src/")
+        ],
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -38,6 +40,11 @@ module.exports = {
         configFile: path.resolve(__dirname, "./tsconfig.json"),
       },
     }),
-    new NodemonPlugin(), 
+    new NodemonPlugin({
+      "execMap": {
+        "js": "node --harmony"
+      },
+      // args: ['| ./node_modules/.bin/bunyan']
+    }), 
   ],
 };

@@ -1,10 +1,10 @@
-import { GetStaticProps, GetStaticPaths, GetServerSideProps, GetServerSidePropsResult } from "next";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import * as React from "react";
 import _ from "lodash";
 import { AgGridReact } from "ag-grid-react";
 import styles from "./index.module.scss";
-import { objectToQueryString } from "../utils";
+import { objectToQueryString } from "../../../shared/utils";
 
 interface Column {
   headerName: string;

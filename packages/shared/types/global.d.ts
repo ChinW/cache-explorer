@@ -1,7 +1,4 @@
-/// <reference types="next" />
-/// <reference types="next/types/global" />
-
-type Env = "prod" | "qa" | "dev";
+/// <reference types="enum.d.ts" />
 
 interface CacheQuery {
     env: Env;
