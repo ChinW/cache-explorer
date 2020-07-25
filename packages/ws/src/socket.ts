@@ -69,7 +69,8 @@ export class Socket {
         map: req.map,
         filter: req.filter,
       };
-      this.clearMapListeners(query.map);
+      this.clearAllListeners();
+      // this.clearMapListeners(query.map);
       const map = await HazelcastUtils.getMap(Env.Dev, query.map);
       const listenId = await map.addEntryListener(
         {
@@ -91,7 +92,7 @@ export class Socket {
   onEntryAdded = (evt: EntryEvent<string, Order>) => {
     const newValue = evt.value;
     this.log.info(newValue);
-    this.send(newValue);
+    this.send([newValue]);
   };
 
   send = (data: any) => {
