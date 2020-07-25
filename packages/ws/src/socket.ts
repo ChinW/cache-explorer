@@ -1,9 +1,9 @@
 import * as WebSocket from "ws";
-import { childLog } from "../lib/logger";
-import { HazelcastUtils } from "../lib/hazelcastUtils";
+import { childLog } from "shared/src/logger";
+import { HazelcastUtils } from "shared/src/hazelcastUtils";
 import { EntryEvent } from "@chiw/hazelcast-client";
-import { Order } from "../lib/cacheFactory/order";
-import { Action, Env } from "../types/enum";
+import { Order } from "shared/src/cacheFactory/order";
+import { Action, Env } from "shared/types/enum";
 
 export class Socket {
   log = childLog(Socket.name);

@@ -1,6 +1,6 @@
 import * as WebSocket from "ws";
 import * as http from "http";
-import { childLog } from "../lib/logger";
+import { childLog } from "shared/src/logger";
 import { Socket } from "./socket";
 
 export class WsServer {

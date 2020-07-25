@@ -1,5 +1,3 @@
-/// <reference types="./enum.ts" />
-
 declare namespace WsServer {
     interface Request {
         map: string;

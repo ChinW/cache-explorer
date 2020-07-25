@@ -14,7 +14,7 @@ module.exports = {
         test: /\.(j|t)sx?$/,
         include: [
           path.resolve(__dirname, "./src/"),
-          path.resolve(__dirname, "./src/")
+          path.resolve(__dirname, "../shared/"),
         ],
         exclude: /node_modules/,
         use: {
@@ -44,7 +44,6 @@ module.exports = {
       "execMap": {
         "js": "node --harmony"
       },
-      // args: ['| ./node_modules/.bin/bunyan']
     }), 
   ],
 };

@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch"
+    "w": "webpack --watch",
+    "w:log": "webpack --watch | ./node_modules/.bin/bunyan -o short"
   },
   "repository": {
     "type": "git",
@@ -24,14 +25,19 @@
     "@chiw/hazelcast-client": "^4.0.7",
     "bunyan": "^1.8.14",
     "lodash": "^4.17.19",
+    "shared": "^1.0.0",
     "ws": "^7.3.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
     "@types/bunyan": "^1.8.6",
     "@types/node": "^14.0.23",
     "@types/ws": "^7.2.6",
+    "babel-loader": "^8.1.0",
     "fork-ts-checker-webpack-plugin": "^5.0.7",
-    "lerna": "^3.22.1",
     "nodemon-webpack-plugin": "^4.3.2",
     "typescript": "^3.9.6",
     "webpack": "^4.43.0",

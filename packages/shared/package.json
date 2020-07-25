@@ -8,5 +8,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@chiw/hazelcast-client": "^4.0.7",
+    "bunyan": "^1.8.14",
+    "lodash": "^4.17.19"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.26",
+    "typescript": "^3.9.7"
+  }
 }

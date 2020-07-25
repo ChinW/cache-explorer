@@ -4,7 +4,7 @@ import * as React from "react";
 import _ from "lodash";
 import { AgGridReact } from "ag-grid-react";
 import styles from "./index.module.scss";
-import { objectToQueryString } from "../../../shared/utils";
+import { objectToQueryString } from "shared/src/utils";
 
 interface Column {
   headerName: string;

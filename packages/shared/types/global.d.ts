@@ -1,4 +1,3 @@
-/// <reference types="enum.d.ts" />
 
 interface CacheQuery {
     env: Env;
