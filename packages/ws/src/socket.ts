@@ -3,7 +3,7 @@ import { childLog } from "shared/src/logger";
 import { HazelcastUtils } from "shared/src/hazelcastUtils";
 import { EntryEvent } from "@chiw/hazelcast-client";
 import { Order } from "shared/src/cacheFactory/order";
-import { Action, Env } from "shared/types/enum";
+import { Action, Env } from "shared/src/constants";
 
 export class Socket {
   log = childLog(Socket.name);

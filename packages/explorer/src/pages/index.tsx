@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import _ from "lodash";
 import { AgGridReact } from "ag-grid-react";
-import styles from "./index.module.scss";
-import { objectToQueryString } from "shared/src/utils";
+import "ag-grid-enterprise";
+import { GridReadyEvent, GridApi, ColumnApi } from "ag-grid-community";
+import { SearchBar } from "../components/searchBar";
+import { Env } from "shared/src/constants";
 import { Ws } from "../lib/websocket";
 
 interface Column {
@@ -13,8 +15,11 @@ interface Column {
 }
 
 interface Props {
-  defaultQuery: CacheQuery;
+  action: string;
+  query: CacheQuery;
   data: Array<any>;
+  gridApi?: GridApi;
+  gridColumnApi?: ColumnApi;
 }
 
 const extractColumns = (data: any[]): Column[] => {
@@ -29,101 +34,154 @@ const extractColumns = (data: any[]): Column[] => {
   return columns;
 };
 
+const initialState: Props = {
+  action: "",
+  query: {
+    env: Env.Dev,
+    map: "",
+    filter: "",
+  },
+  data: [],
+  gridApi: null,
+  gridColumnApi: null,
+};
+
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
   return {
-    props: {
-      defaultQuery: {
-        env: "dev",
-        map: "",
-        filter: "",
-      },
-      data: [],
-    },
+    props: initialState,
   };
 };
 
+export const usePrevious = (value): any => {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
+
 export default (props: Props) => {
-  const selectEl = React.useRef(null);
-  const mapEl = React.useRef(null);
-  const filterEl = React.useRef(null);
   const router = useRouter();
+  const [query, setQuery] = React.useState(
+    Object.assign(
+      {
+        env: Env.Dev,
+        map: "",
+        filter: "",
+      },
+      router.query
+    )
+  );
+  const [gridApi, setGridApi] = React.useState(props.gridApi);
+  const [gridColumnApi, setGridColumnApi] = React.useState(props.gridColumnApi);
   const [state, dispatch] = React.useReducer((state: Props, action: { type: string; data: any }) => {
     switch (action.type) {
       case "newData": {
         return Object.assign({}, state, {
+          action: action.type,
           data: state.data.concat(action.data),
         });
       }
       case "initData": {
         return Object.assign({}, state, {
+          action: action.type,
           data: action.data,
         });
+      }
+      case "setGridApi": {
+        return Object.assign({}, state, {
+          action: action.type,
+          gridApi: action.data,
+        });
+      }
+      case "setGridColumnApi": {
+        action: action.type, (state.gridColumnApi = action.data);
+        return state;
       }
       default:
         return state;
     }
-  }, props);
-  const query = Object.assign({}, props.defaultQuery, router.query);
-  const search = async () => {
-    const env = selectEl.current.value;
-    const map = mapEl.current.value || "";
-    const filter = filterEl.current.value || "";
-    router.push(
-      `/?${objectToQueryString({
-        env,
-        map,
-        filter,
-      })}`,
-      undefined,
-      { shallow: true }
-    );
-  };
-
-  const wsSetup = async (ws: Ws) => {
-    dispatch({
-      type: "initData",
-      data: []
-    });
-    await ws.init();
-    ws.subscribeMap(query.env, query.map, query.filter);
-    ws.subscribeOnMessage((newData) => {
-      dispatch({
-        type: "newData",
-        data: newData,
-      });
-    });
-  };
+  }, initialState);
+  const prevState = usePrevious(state);
 
   React.useEffect(() => {
     const ws = new Ws();
+    const wsSetup = async (ws: Ws) => {
+      dispatch({
+        type: "initData",
+        data: [],
+      });
+      await ws.init();
+      ws.subscribeMap(query.env, query.map, query.filter);
+      ws.subscribeOnMessage((newData) => {
+        dispatch({
+          type: "newData",
+          data: newData,
+        });
+      });
+    };
     wsSetup(ws);
     return () => {
       ws.close();
     };
-  }, [router.query, dispatch]);
+  }, [query, dispatch]);
+
+  React.useEffect(() => {
+    if (state.action === "newData" && state.gridColumnApi) {
+      state.gridColumnApi.autoSizeAllColumns();
+    }
+  }, [state]);
+
+  const onGridReady = (params: GridReadyEvent) => {
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+    dispatch({
+      type: "setGridApi",
+      data: params.api,
+    });
+    dispatch({
+      type: "setGridColumnApi",
+      data: params.columnApi,
+    });
+    params.columnApi.autoSizeAllColumns();
+  };
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className={`flex flex-row ${styles.searchBar}`}>
-        <select className="text-gray-700 text-xs mr-1 shadow borded" name="env" defaultValue={query.env} ref={selectEl}>
-          <option value={"prod"}>PROD</option>
-          <option value={"qa"}>QA</option>
-          <option value={"dev"}>DEV</option>
-        </select>
-        <div className={styles.filterItem}>
-          <label htmlFor="">Map</label>
-          <input type="text" ref={mapEl} defaultValue={query.map} />
-        </div>
-        <div className={`${styles.filterItem} flex-grow`}>
-          <label htmlFor="">Filters</label>
-          <input type="text" ref={filterEl} defaultValue={query.filter} className="flex-grow" />
-        </div>
-        <button className="btn btn-xs btn-blue" onClick={search}>
-          Go
-        </button>
-      </div>
+      <SearchBar query={query} setQuery={setQuery} />
       <div className={`flex-grow ag-theme-alpine`}>
-        <AgGridReact columnDefs={extractColumns(state.data)} rowData={state.data}></AgGridReact>
+        <AgGridReact
+          columnDefs={extractColumns(state.data)}
+          defaultColDef={{
+            resizable: true,
+            sortable: true,
+            enablePivot: true,
+            enableRowGroup: true,
+          }}
+          sideBar={true}
+          enableRangeSelection={true}
+          statusBar={{
+            statusPanels: [
+              {
+                statusPanel: "agTotalAndFilteredRowCountComponent",
+                align: "left",
+              },
+              {
+                statusPanel: "agTotalRowCountComponent",
+                align: "center",
+              },
+              { statusPanel: "agFilteredRowCountComponent" },
+              { statusPanel: "agSelectedRowCountComponent" },
+              { statusPanel: "agAggregationComponent" },
+            ],
+          }}
+          rowGroupPanelShow={"always"}
+          pivotPanelShow={"always"}
+          pivotColumnGroupTotals={"after"}
+          pivotRowTotals={"before"}
+          rowData={state.data}
+          onGridReady={onGridReady}
+        />
       </div>
     </div>
   );

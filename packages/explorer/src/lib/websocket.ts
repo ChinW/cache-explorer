@@ -1,4 +1,4 @@
-import { Env } from "shared/types/enum";
+import { Env } from "shared/src/constants";
 
 type OnMessageCallback = (data: any[]) => void;
 

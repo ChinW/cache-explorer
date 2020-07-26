@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from "next";
 
-console.log('cache api');
+console.log("cache api");
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    res.status(200).json([])
-}
+  res.status(200).json([]);
+};
