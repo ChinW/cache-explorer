@@ -9,6 +9,8 @@ interface Props {
   setQuery: Dispatch<SetStateAction<CacheQuery>>;
 }
 
+export const MAP_LIST = ["city_weather", "orders", "others"];
+
 export const SearchBar = (props: Props) => {
   const selectEl = React.useRef(null);
   const mapEl = React.useRef(null);
@@ -44,7 +46,11 @@ export const SearchBar = (props: Props) => {
       </select>
       <div className={styles.filterItem}>
         <label htmlFor="">Map</label>
-        <input type="text" ref={mapEl} defaultValue={query.map} />
+        <select className="text-gray-700 text-xs mr-1 shadow borded" name="env" defaultValue={query.map} ref={mapEl}>
+          {MAP_LIST.map((map) => {
+            return <option key={map} value={map}>{map}</option>;
+          })}
+        </select>
       </div>
       <div className={`${styles.filterItem} flex-grow`}>
         <label htmlFor="">Filters</label>

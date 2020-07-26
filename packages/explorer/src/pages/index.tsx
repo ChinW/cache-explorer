@@ -60,6 +60,37 @@ export const usePrevious = (value): any => {
   return ref.current;
 };
 
+export const wsDataReducer = (state: Props, action: { type: string; data: any }) => {
+  switch (action.type) {
+    case "newData": {
+      return Object.assign({}, state, {
+        action: action.type,
+        data: state.data.concat(action.data),
+      });
+    }
+    case "initData": {
+      return Object.assign({}, state, {
+        action: action.type,
+        data: action.data,
+      });
+    }
+    case "setGridApi": {
+      return Object.assign({}, state, {
+        action: action.type,
+        gridApi: action.data,
+      });
+    }
+    case "setGridColumnApi": {
+      return Object.assign({}, state, {
+        action: action.type,
+        gridColumnApi: action.data,
+      });
+    }
+    default:
+      return state;
+  }
+}
+
 export default (props: Props) => {
   const router = useRouter();
   const [query, setQuery] = React.useState(
@@ -74,34 +105,7 @@ export default (props: Props) => {
   );
   const [gridApi, setGridApi] = React.useState(props.gridApi);
   const [gridColumnApi, setGridColumnApi] = React.useState(props.gridColumnApi);
-  const [state, dispatch] = React.useReducer((state: Props, action: { type: string; data: any }) => {
-    switch (action.type) {
-      case "newData": {
-        return Object.assign({}, state, {
-          action: action.type,
-          data: state.data.concat(action.data),
-        });
-      }
-      case "initData": {
-        return Object.assign({}, state, {
-          action: action.type,
-          data: action.data,
-        });
-      }
-      case "setGridApi": {
-        return Object.assign({}, state, {
-          action: action.type,
-          gridApi: action.data,
-        });
-      }
-      case "setGridColumnApi": {
-        action: action.type, (state.gridColumnApi = action.data);
-        return state;
-      }
-      default:
-        return state;
-    }
-  }, initialState);
+  const [state, dispatch] = React.useReducer(wsDataReducer, initialState);
   const prevState = usePrevious(state);
 
   React.useEffect(() => {
