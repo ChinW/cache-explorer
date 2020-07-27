@@ -1,6 +1,6 @@
-import { Env } from "shared/src/constants";
+import { Env, WsRequestType } from "shared/src/enums";
 
-type OnMessageCallback = (data: any[]) => void;
+type OnMessageCallback = (data: WSS.Response) => void;
 
 export class Ws {
   socket: WebSocket;
@@ -14,28 +14,28 @@ export class Ws {
     return new Promise((resolve) => {
       this.socket.addEventListener("open", (event: Event) => {
         this.socket.addEventListener("message", (evt: MessageEvent) => {
-          const result = JSON.parse(evt.data);
+          const result: WSS.Response = JSON.parse(evt.data);
           for (const cb of this.onMessageListeners) {
             cb(result);
           }
         });
         resolve(0);
       });
-    })
-    
-  }
+    });
+  };
 
-  subscribeMap = (env: Env, map: string, filter: string) => {
-    if (this.socket) {
-      this.socket.send(
-        JSON.stringify({
-          map,
-          filter,
-          action: "Subscribe",
-          env: env.toString(),
-        })
-      );
+  subscribeMap = (map: string, filter: string) => {
+    if (this.socket && map.length > 0) {
+      this.send({
+        map,
+        filter,
+        action: WsRequestType.Subscribe,
+      });
     }
+  };
+
+  send = (request: WSS.Request) => {
+    this.socket.send(JSON.stringify(request));
   };
 
   close = () => {

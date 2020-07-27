@@ -1,6 +1,6 @@
 import { Order } from "./order";
 import { Portable, PortableFactory } from "@chiw/hazelcast-client/lib/serialization/Serializable";
-import { CACHE_TYPE_CLASS_ID } from "./cacheConstants";
+import { CACHE_TYPE_CLASS_ID } from "../cacheConstants";
 
 const CLASS_ID_TO_TYPE = {
   [CACHE_TYPE_CLASS_ID.ORDER]: Order,

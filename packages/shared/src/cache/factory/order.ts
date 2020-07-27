@@ -1,8 +1,8 @@
-import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from "./cacheConstants";
+import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from "../cacheConstants";
 import { Portable } from "@chiw/hazelcast-client/lib/serialization/Serializable";
 import { BaseType } from "./base";
 
-export class Order extends BaseType implements Portable, CacheType {
+export class Order extends BaseType implements Portable, Cache.DataType {
   city: string = "";
   weather: string = "";
 

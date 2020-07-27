@@ -1,5 +1,5 @@
 const path = require("path");
-const NodemonPlugin = require('nodemon-webpack-plugin');
+const NodemonPlugin = require("nodemon-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = {
@@ -12,10 +12,7 @@ module.exports = {
     rules: [
       {
         test: /\.(j|t)sx?$/,
-        include: [
-          path.resolve(__dirname, "./src/"),
-          path.resolve(__dirname, "../shared/"),
-        ],
+        include: [path.resolve(__dirname, "./src/"), path.resolve(__dirname, "../shared/")],
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -41,9 +38,9 @@ module.exports = {
       },
     }),
     new NodemonPlugin({
-      "execMap": {
-        "js": "node --harmony"
+      execMap: {
+        js: "node --harmony",
       },
-    }), 
+    }),
   ],
 };

@@ -1,8 +1,7 @@
-import { WsServer, test } from './wsServer';
+import { WsServer } from './wsServer';
 
 export const start = () => {
   const server = new WsServer();
-  test();
 };
 
 start();

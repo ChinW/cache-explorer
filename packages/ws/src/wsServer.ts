@@ -26,7 +26,3 @@ export class WsServer {
     new Socket(socket);
   };
 }
-
-export const test = () => {
-  return 1;
-}
