@@ -7,6 +7,7 @@ export class Ws {
   onMessageListeners: Array<OnMessageCallback> = [];
 
   constructor() {
+    console.log("created ws object");
     this.socket = new WebSocket("ws://localhost:9999");
   }
 
