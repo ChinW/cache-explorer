@@ -10,6 +10,8 @@ declare namespace WsExplorer {
     request?: WSS.Request;
     response?: WSS.Response;
     data: Array<any>;
-    ws: import("../src/lib/websocket").Ws
+    ws: import("../src/lib/websocket").Ws;
+    navigate: any;
+    location: any;
   }
 }

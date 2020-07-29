@@ -1,41 +1,40 @@
-import * as React from "react"
-import { objectToQueryString } from "shared/src/utils"
-import { WsRequestType, Env } from "shared/src/enums"
-import styles from "./searchBar.module.scss"
-import { navigate } from "gatsby"
+import * as React from "react";
+import { objectToQueryString } from "shared/src/utils";
+import { WsRequestType, Env } from "shared/src/enums";
+import "./searchBar.scss";
 
-export const MAP_LIST = ["", "city_weather", "orders", "others"]
-export const ENVIRONMENTS = [Env.Prod, Env.QA, Env.Dev]
+export const MAP_LIST = ["", "city_weather", "orders", "others"];
+export const ENVIRONMENTS = [Env.Prod, Env.QA, Env.Dev];
 
 export const SearchBar = (props: SearchBar.Props) => {
   console.log(props);
-  const selectEl = React.useRef(null)
-  const mapEl = React.useRef(null)
-  const filterEl = React.useRef(null)
+  const selectEl = React.useRef(null);
+  const mapEl = React.useRef(null);
+  const filterEl = React.useRef(null);
   const router = {
     query: {
       env: Env.Dev,
       map: "",
       filter: "",
     },
-  }
-  const { query } = props
+  };
+  const { query } = props;
   const search = async () => {
-    const env = selectEl.current.value
-    const map = mapEl.current.value || ""
-    const filter = filterEl.current.value || ""
-    props.nagative(
-      `/?${objectToQueryString({
-        env,
-        map,
-        filter,
-      })}`,
-    );
-  }
+    const env = selectEl.current.value;
+    const map = mapEl.current.value || "";
+    const filter = filterEl.current.value || "";
+    // props.nagative(
+    //   `/?${objectToQueryString({
+    //     env,
+    //     map,
+    //     filter,
+    //   })}`
+    // );
+  };
 
   return (
-    <div className={`flex flex-row ${styles.searchBar}`}>
-      <div className={styles.filterItem}>
+    <div className={`flex flex-row searchBar`}>
+      <div className={"filterItem"}>
         <label htmlFor="">Env</label>
         <select
           className="text-gray-700 h-full bg-blue-100 text-xs mr-1 shadow borded"
@@ -48,11 +47,11 @@ export const SearchBar = (props: SearchBar.Props) => {
               <option key={env} value={env}>
                 {env}
               </option>
-            )
+            );
           })}
         </select>
       </div>
-      <div className={styles.filterItem}>
+      <div className={"filterItem"}>
         <label htmlFor="">Map</label>
         <select
           className="text-gray-700 h-full bg-blue-100 text-xs mr-1 shadow borded"
@@ -65,11 +64,11 @@ export const SearchBar = (props: SearchBar.Props) => {
               <option key={map} value={map}>
                 {map}
               </option>
-            )
+            );
           })}
         </select>
       </div>
-      <div className={`${styles.filterItem} flex-grow`}>
+      <div className={`filterItem flex-grow`}>
         <label htmlFor="">Filters</label>
         <input
           type="text"
@@ -82,5 +81,5 @@ export const SearchBar = (props: SearchBar.Props) => {
         Go
       </button>
     </div>
-  )
-}
+  );
+};

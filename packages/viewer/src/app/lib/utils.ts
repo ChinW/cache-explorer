@@ -11,9 +11,7 @@ export const usePrevious = (value: any): any => {
 };
 
 export const extractColumns = (data: any[]): CacheGrid.Column[] => {
-  const columns: CacheGrid.Column[] = _.union(
-    ...data.map(i => Object.keys(i))
-  ).map(
+  const columns: CacheGrid.Column[] = _.union(...data.map((i) => Object.keys(i))).map(
     (i: string): CacheGrid.Column => {
       return {
         headerName: i,
@@ -25,18 +23,16 @@ export const extractColumns = (data: any[]): CacheGrid.Column[] => {
 };
 
 export const getSearch = (searchString: string): SearchBar.Query => {
-  let result = {
+  let result: any = {
     env: Env.Dev,
     map: "",
     filter: "",
   };
   if (searchString.length > 0) {
     let urlParams = new URLSearchParams(searchString.substring(1));
-    const entries = urlParams.entries();
-    for (let entry of entries) {
-      const [key, value] = entry;
+    urlParams.forEach((value, key) => {
       result[key] = value;
-    }
+    })
   }
   return result;
 };

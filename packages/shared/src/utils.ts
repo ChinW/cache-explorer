@@ -1,4 +1,4 @@
-import _ from "lodash";
+import * as _ from "lodash";
 
 export const objectToQueryString = (obj: { [key: string]: any }) => {
   var qs = _.reduce(
