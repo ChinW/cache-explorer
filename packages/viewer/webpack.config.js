@@ -59,10 +59,15 @@ module.exports = {
         ]
       },
       {
-        test: /(\.css|\.scss|\.sass)$/,
-        use: [
+        test: /\.module\.s(a|c)ss$/,
+        loader: [
           'style-loader',
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+            }
+          },
           {
             loader: 'postcss-loader',
             options: {
@@ -73,8 +78,34 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              implementation: require('sass'),
-            },
+              implementation: require('sass')
+            }
+          }
+        ]
+      },
+      {
+        test: /(\.css|\.scss|\.sass)$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            // options: {
+            //   modules: 'global',
+            // }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [require('tailwindcss'), require('autoprefixer')]
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass')
+            }
           }
         ]
       },

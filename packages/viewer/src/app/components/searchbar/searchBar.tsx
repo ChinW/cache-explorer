@@ -1,7 +1,7 @@
 import * as React from "react";
 import { objectToQueryString } from "shared/src/utils";
 import { WsRequestType, Env } from "shared/src/enums";
-import "./searchBar.scss";
+import styles from "./searchBar.module.scss";
 
 export const MAP_LIST = ["", "city_weather", "orders", "others"];
 export const ENVIRONMENTS = [Env.Prod, Env.QA, Env.Dev];
@@ -33,8 +33,8 @@ export const SearchBar = (props: SearchBar.Props) => {
   };
 
   return (
-    <div className={`flex flex-row searchBar`}>
-      <div className={"filterItem"}>
+    <div className={`flex flex-row ${styles.searchBar}`}>
+      <div className={styles.filterItem}>
         <label htmlFor="">Env</label>
         <select
           className="text-gray-700 h-full bg-blue-100 text-xs mr-1 shadow borded"
@@ -51,7 +51,7 @@ export const SearchBar = (props: SearchBar.Props) => {
           })}
         </select>
       </div>
-      <div className={"filterItem"}>
+      <div className={styles.filterItem}>
         <label htmlFor="">Map</label>
         <select
           className="text-gray-700 h-full bg-blue-100 text-xs mr-1 shadow borded"
@@ -68,7 +68,7 @@ export const SearchBar = (props: SearchBar.Props) => {
           })}
         </select>
       </div>
-      <div className={`filterItem flex-grow`}>
+      <div className={`${styles.filterItem} flex-grow`}>
         <label htmlFor="">Filters</label>
         <input
           type="text"
