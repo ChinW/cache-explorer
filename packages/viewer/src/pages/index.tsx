@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { useRouter } from "next/router";
 import * as React from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-enterprise";
@@ -7,15 +6,21 @@ import { GridReadyEvent } from "ag-grid-community";
 import { SearchBar } from "../components/searchBar";
 import { Env, WsRequestType, WsResponseType } from "shared/src/enums";
 import { Ws } from "../lib/websocket";
-import { extractColumns } from "../lib/utils";
+import { extractColumns, getSearch } from "../lib/utils";
+import { PageProps } from "gatsby";
+import { Order } from "shared/src/cache/order";
 
 const initialState: WsExplorer.Props = {
   request: null,
   response: null,
   data: [],
+  ws: new Ws(),
 };
 
-export const wsDataReducer = (state: WsExplorer.Props, action: WSS.Response) => {
+export const wsDataReducer = (
+  state: WsExplorer.Props,
+  action: WSS.Response
+) => {
   switch (action.type) {
     case WsResponseType.DeltaData: {
       return Object.assign({}, state, {
@@ -34,40 +39,44 @@ export const wsDataReducer = (state: WsExplorer.Props, action: WSS.Response) => 
   }
 };
 
-export default (props: WsExplorer.Props) => {
-  const router = useRouter();
+export default (props: WsExplorer.Props & PageProps) => {
+  const query = getSearch(props.location.search);
   const [gridColumnApi, setGridColumnApi] = React.useState(null);
   const [state, dispatch] = React.useReducer(wsDataReducer, initialState);
 
-  const query = Object.assign({
-    env: Env.Dev,
-    map: "",
-    filter: "",
-  }, router.query);
-
   React.useEffect(() => {
-    const ws = new Ws();
-    const wsSetup = async (ws: Ws) => {
-      dispatch({
-        type: WsResponseType.InitData,
-        data: [],
-      });
-      await ws.init();
-      ws.subscribeMap(query.map, query.filter);
-      ws.subscribeOnMessage((response: WSS.Response) => {
-        dispatch(response);
+    console.log("entering A");
+    const initWs = async () => {
+      await state.ws.init();
+      return new Promise(resolve => {
+        setTimeout(() => {
+          console.log("done");
+          resolve(1);
+        }, 2000);
+        state.ws.subscribeOnMessage((response: WSS.Response) => {
+          dispatch(response);
+        });
       });
     };
-    wsSetup(ws);
+    initWs();
     return () => {
-      ws.close();
+      state.ws.close();
     };
-  }, [router.query, dispatch]);
+  }, [dispatch]);
 
   React.useEffect(() => {
-    console.log(state.response, gridColumnApi)
-    if (state.response && state.response.type === WsResponseType.InitData && gridColumnApi) {
-      console.log("set data")
+    if (state.ws.socket && state.ws.socket.readyState === WebSocket.OPEN) {
+      state.ws.subscribeMap(query.map, query.filter);
+    }
+  }, [state.ws.socket, props.location]);
+
+  React.useEffect(() => {
+    console.log(state.response, gridColumnApi);
+    if (
+      state.response &&
+      state.response.type === WsResponseType.InitData &&
+      gridColumnApi
+    ) {
       gridColumnApi.autoSizeAllColumns();
     }
   }, [state.response]);
@@ -79,7 +88,7 @@ export default (props: WsExplorer.Props) => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <SearchBar query={query} />
+      <SearchBar query={query} nagative={props.navigate} />
       <div className={`flex-grow ag-theme-alpine`}>
         <AgGridReact
           columnDefs={extractColumns(state.data)}
@@ -112,6 +121,10 @@ export default (props: WsExplorer.Props) => {
           pivotRowTotals={"before"}
           rowData={state.data}
           onGridReady={onGridReady}
+          deltaRowDataMode={true}
+          getRowNodeId={(data: Order) => {
+            return data.city;
+          }}
         />
       </div>
     </div>

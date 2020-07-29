@@ -1,4 +1,4 @@
-/// <reference path="./node_modules/shared/types/wss.d.ts" />
+/// <reference path="../node_modules/shared/types/wss.d.ts" />
 
 declare namespace WsExplorer {
   interface Column {
@@ -10,5 +10,6 @@ declare namespace WsExplorer {
     request?: WSS.Request;
     response?: WSS.Response;
     data: Array<any>;
+    ws: import("../src/lib/websocket").Ws
   }
 }

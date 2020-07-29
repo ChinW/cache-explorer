@@ -8,5 +8,6 @@ declare namespace SearchBar {
   }
   interface Props {
     query: Query;
+    nagative: import("@reach/router").NavigateFn
   }
 }

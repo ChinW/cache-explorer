@@ -3,15 +3,15 @@ import { Env, WsRequestType } from "shared/src/enums";
 type OnMessageCallback = (data: WSS.Response) => void;
 
 export class Ws {
-  socket: WebSocket;
+  socket?: WebSocket;
   onMessageListeners: Array<OnMessageCallback> = [];
 
   constructor() {
     console.log("created ws object");
-    this.socket = new WebSocket("ws://localhost:9999");
   }
 
   init = async () => {
+    this.socket = new WebSocket("ws://localhost:9999");
     return new Promise((resolve) => {
       this.socket.addEventListener("open", (event: Event) => {
         this.socket.addEventListener("message", (evt: MessageEvent) => {

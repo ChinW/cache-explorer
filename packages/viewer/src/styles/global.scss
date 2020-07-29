@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+#gatsby-focus-wrapper {
+  height: 100%;
+}
+
 .btn {
   @apply font-bold px-2 rounded;
 }
