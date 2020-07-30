@@ -2,16 +2,6 @@
   "name": "viewer",
   "version": "1.1.1",
   "private": true,
-  "description": "A frontend boilerplate with React hooks, Redux and Typescript",
-  "homepage": "https://rokoroku.github.io/react-redux-typescript-boilerplate",
-  "keywords": [
-    "react",
-    "hooks",
-    "redux",
-    "typescript",
-    "boilerplate",
-    "todomvc"
-  ],
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --hot --progress --color --port 3000",
@@ -19,14 +9,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
-    "@babel/preset-react": "^7.10.4",
-    "@babel/preset-typescript": "^7.10.1",
     "@types/classnames": "^2.2.9",
     "@types/history": "^4.7.3",
     "@types/lodash": "^4.14.158",
