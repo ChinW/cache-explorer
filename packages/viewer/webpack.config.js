@@ -8,9 +8,9 @@ var sourcePath = path.join(__dirname, './src');
 var outPath = path.join(__dirname, './build');
 
 // plugins
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var MiniCssExtractPlugin = require('mini-css-extract-plugin');
-var { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
@@ -90,9 +90,6 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader',
-            // options: {
-            //   modules: 'global',
-            // }
           },
           {
             loader: 'postcss-loader',
@@ -109,40 +106,6 @@ module.exports = {
           }
         ]
       },
-      // {
-      //   test: /\.css$/,
-      //   use: [
-      //     isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-      //     {
-      //       loader: 'css-loader',
-      //       query: {
-      //         sourceMap: !isProduction,
-      //         importLoaders: 1,
-      //         modules: {
-      //           localIdentName: isProduction ? '[hash:base64:5]' : '[local]__[hash:base64:5]'
-      //         }
-      //       }
-      //     },
-      //     {
-      //       loader: 'postcss-loader',
-      //       options: {
-      //         ident: 'postcss',
-      //         plugins: [
-      //           require('postcss-import')({ addDependencyTo: webpack }),
-      //           require('postcss-url')(),
-      //           require('postcss-preset-env')({
-      //             /* use stage 2 features (defaults) */
-      //             stage: 2
-      //           }),
-      //           require('postcss-reporter')(),
-      //           require('postcss-browser-reporter')({
-      //             disabled: isProduction
-      //           })
-      //         ]
-      //       }
-      //     }
-      //   ]
-      // },
       // static assets
       { test: /\.html$/, use: 'html-loader' },
       { test: /\.(a?png|svg)$/, use: 'url-loader?limit=10000' },
