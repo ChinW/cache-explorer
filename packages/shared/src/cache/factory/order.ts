@@ -7,10 +7,12 @@ export class Order extends BaseType implements Portable, Cache.DataType {
   weather: string = "";
 
   toObject = () => {
-    const obj = {};
+    const obj: any = {};
     for(const key of Object.keys(this)) {
+      // @ts-ignore
       if(typeof this[key] !== 'function') {
-        obj[key] = this[key];
+        // @ts-ignore
+        obj[key] = this[key]; 
       }
     }
     return obj;
