@@ -1,27 +1,16 @@
-import { Client, Config, IMap } from "@chiw/hazelcast-client/lib/index.js";
-import { ReadOnlyLazyList } from "@chiw/hazelcast-client/lib/core/ReadOnlyLazyList.js";
-import { SqlPredicate } from "@chiw/hazelcast-client/lib/serialization/DefaultPredicates.js";
-import { CachePortableFactory } from "./factory/portableFactory";
-import { FACTORY_ID } from "./cacheConstants";
-import { log } from "../logger";
-import { Env } from "../enums";
-
-export const FACTORIES = {
-  [FACTORY_ID]: new CachePortableFactory(),
-};
+import { Client, IMap, Predicates } from 'hazelcast-client';
+import { ReadOnlyLazyList } from 'hazelcast-client/lib/core/ReadOnlyLazyList.js';
+import { getClientConfig } from './cacheClientConfig';
+import { log } from '../logger';
+import { Env } from '../enums';
 
 export class Cacher {
   static client: Client | null = null;
 
   static getClient = async (env: Env): Promise<Client> => {
     if (Cacher.client === null) {
-      const clientConfig = new Config.ClientConfig();
-      clientConfig.clusterName = "jet";
-      Object.keys(FACTORIES).map((factoryId) => {
-        clientConfig.serializationConfig.portableFactories[factoryId] = FACTORIES[factoryId];
-      });
-      Cacher.client = await Client.newHazelcastClient(clientConfig);
-      log.info("Hazelcast client initialized");
+      Cacher.client = await Client.newHazelcastClient(getClientConfig(env));
+      log.info('Hazelcast client initialized');
     }
     return Cacher.client;
   };
@@ -45,8 +34,9 @@ export class Cacher {
       if (mapName.length > 0) {
         const map = await Cacher.getMap(env, mapName);
         const values: ReadOnlyLazyList<Cache.DataType> =
-          filter.length > 0 ? await map.valuesWithPredicate(new SqlPredicate(filter)) : await map.values();
+          filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
         const results = values.toArray();
+        // log.info("results", results)
         return results.map((i) => i.toObject());
       }
       return [];

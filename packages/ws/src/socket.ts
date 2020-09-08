@@ -1,7 +1,7 @@
 import * as WebSocket from "ws";
 import { childLog } from "shared/src/logger";
 import { Cacher } from "shared/src/cache/cacher";
-import { EntryEvent } from "@chiw/hazelcast-client";
+import { EntryEvent } from "hazelcast-client";
 import { Order } from "shared/src/cache/factory/order";
 import { WsRequestType, Env, WsResponseType } from "shared/src/enums";
 

@@ -4,7 +4,7 @@ import { WsRequestType, Env } from 'shared/src/enums';
 import styles from './searchBar.module.scss';
 import { useHistory } from 'react-router';
 
-export const MAP_LIST = ['', 'city_weather', 'orders', 'others'];
+export const MAP_LIST = ['', 'weather', 'orders', 'others'];
 export const ENVIRONMENTS = [Env.Prod, Env.QA, Env.Dev];
 
 export const SearchBar = (props: SearchBar.Props) => {
