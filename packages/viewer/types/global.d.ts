@@ -18,6 +18,7 @@ declare module '*.scss' {
 declare namespace CacheGrid {
   interface Column {
     headerName: string;
-    field: string;
+    field?: string;
+    children?: Column[];
   }
 }

@@ -1,6 +1,6 @@
-import * as React from "react";
-import _ from "lodash";
-import { Env } from "shared/src/enums";
+import * as React from 'react';
+import _ from 'lodash';
+import { Env } from 'shared/src/enums';
 
 export const usePrevious = (value: any): any => {
   const ref = React.useRef();
@@ -10,13 +10,19 @@ export const usePrevious = (value: any): any => {
   return ref.current;
 };
 
-export const extractColumns = (data: any[]): CacheGrid.Column[] => {
-  const columns: CacheGrid.Column[] = _.union(...data.map((i) => Object.keys(i))).map(
-    (i: string): CacheGrid.Column => {
-      return {
-        headerName: i,
-        field: i,
+export const extractColumns = (data: { [key: string]: any }, parent: string = ''): CacheGrid.Column[] => {
+  const columns: CacheGrid.Column[] = _.keys(data).map(
+    (fieldName: string): CacheGrid.Column => {
+      const col: CacheGrid.Column = {
+        headerName: fieldName
       };
+      if (typeof data[fieldName] === 'object') {
+        col.field = fieldName;
+        col.children = extractColumns(data[fieldName], fieldName);
+      } else {
+        col.field = parent.length > 0 ? `${parent}.${fieldName}` : fieldName;
+      }
+      return col;
     }
   );
   return columns;
@@ -25,14 +31,14 @@ export const extractColumns = (data: any[]): CacheGrid.Column[] => {
 export const getSearch = (searchString: string): SearchBar.Query => {
   let result: any = {
     env: Env.Dev,
-    map: "",
-    filter: "",
+    map: '',
+    filter: ''
   };
   if (searchString.length > 0) {
     let urlParams = new URLSearchParams(searchString.substring(1));
     urlParams.forEach((value, key) => {
       result[key] = value;
-    })
+    });
   }
   return result;
 };

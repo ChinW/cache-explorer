@@ -83,7 +83,7 @@ export const Viewer = (props: WsExplorer.Props) => {
       <SearchBar query={query} />
       <div className={`flex-grow ag-theme-alpine`}>
         <AgGridReact
-          columnDefs={extractColumns(state.data)}
+          columnDefs={extractColumns(_.get(state, 'data[0]', {}))}
           defaultColDef={{
             resizable: true,
             sortable: true,
