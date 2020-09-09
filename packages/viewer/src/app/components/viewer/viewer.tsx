@@ -7,7 +7,7 @@ import { SearchBar } from '../searchbar/searchBar';
 import { Env, WsRequestType, WsResponseType } from 'shared/src/enums';
 import { Ws } from '../../lib/websocket';
 import { extractColumns, getSearch } from '../../lib/utils';
-import { Order } from 'shared/src/cache/factory/order';
+import { Order } from 'shared/src/cache/types/order';
 import { useLocation } from 'react-router';
 
 const initialState: WsExplorer.Props = {
@@ -46,12 +46,9 @@ export const Viewer = (props: WsExplorer.Props) => {
     const initWs = async () => {
       await state.ws.init();
       return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log('done');
-          resolve(1);
-        }, 2000);
         state.ws.subscribeOnMessage((response: WSS.Response) => {
           dispatch(response);
+          resolve(0);
         });
       });
     };
@@ -115,7 +112,7 @@ export const Viewer = (props: WsExplorer.Props) => {
           onGridReady={onGridReady}
           deltaRowDataMode={true}
           getRowNodeId={(data: Order) => {
-            return data.city;
+            return data.id;
           }}
         />
       </div>

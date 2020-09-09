@@ -1,6 +1,6 @@
 import { Env } from "../enums";
 import { ClientConfig } from "hazelcast-client";
-import { PORTABLE_FACTORIES } from "./factory/portableFactory";
+import { PORTABLE_FACTORIES } from "./types/portableFactory";
 
 export const getClientConfig = (env: Env): ClientConfig => {
     const cfg: ClientConfig = {

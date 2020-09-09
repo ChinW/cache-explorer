@@ -4,12 +4,13 @@ import { PortableFactory, Portable } from "hazelcast-client";
 import { Client } from "./client";
 
 const CLASS_ID_TO_TYPE = {
-  [CACHE_TYPE_CLASS_ID.ORDER]: Order,
-  [CACHE_TYPE_CLASS_ID.CLIENT]: Client,
+  [CACHE_TYPE_CLASS_ID.ORDER.toFixed(0)]: Order,
+  [CACHE_TYPE_CLASS_ID.CLIENT.toFixed(0)]: Client,
 };
 
 export const CachePortableFactory: PortableFactory = (classId: number): Portable => {
-  return CLASS_ID_TO_TYPE[classId] ? new CLASS_ID_TO_TYPE[classId]() : null;
+  const type = CLASS_ID_TO_TYPE[classId];
+  return type ? new type() : null;
 };
 
 export const PORTABLE_FACTORIES: { [key: string]: PortableFactory } = {

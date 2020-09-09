@@ -1,8 +1,8 @@
 import * as WebSocket from "ws";
 import { childLog } from "shared/src/logger";
-import { Cacher } from "shared/src/cache/cacher";
+import { Cache } from "shared/src/cache/cache";
 import { EntryEvent } from "hazelcast-client";
-import { Order } from "shared/src/cache/factory/order";
+import { Order } from "shared/src/cache/types/order";
 import { WsRequestType, Env, WsResponseType } from "shared/src/enums";
 
 export class Socket {
@@ -40,7 +40,7 @@ export class Socket {
     const listenIds = this.mapSubscriptions[mapName];
     if (listenIds && listenIds.length > 0) {
       this.log.info("clear listeners in map", mapName);
-      const map = await Cacher.getMap(Env.Dev, mapName);
+      const map = await Cache.getMap(Env.Dev, mapName);
       for (const id of listenIds) {
         await map.removeEntryListener(id);
       }
@@ -54,7 +54,7 @@ export class Socket {
     if (req.action === WsRequestType.Subscribe) {
       this.log.info(req);
       this.clearAllListeners();
-      const map = await Cacher.getMap(Env.Dev, req.map);
+      const map = await Cache.getMap(Env.Dev, req.map);
       const listenId = await map.addEntryListener(
         {
           added: this.onEntryAdded,
@@ -66,7 +66,7 @@ export class Socket {
         this.mapSubscriptions[req.map] = [];
       }
       this.mapSubscriptions[req.map].push(listenId);
-      const values = await Cacher.getValues(Env.Dev, req.map, req.filter);
+      const values = await Cache.getValues(Env.Dev, req.map, req.filter);
       this.send(WsResponseType.InitData, values);
     }
   };
