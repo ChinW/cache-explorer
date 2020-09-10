@@ -1,4 +1,4 @@
-import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from "../cacheConstants";
+import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from "../cache/cacheConstants";
 import { BaseType } from "./base";
 import { Client } from "./client";
 

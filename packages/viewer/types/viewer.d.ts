@@ -9,7 +9,7 @@ declare namespace WsExplorer {
   interface Props {
     request?: WSS.Request;
     response?: WSS.Response;
-    data: Array<any>;
+    // data: Array<any>;
     ws: import("../src/lib/websocket").Ws;
   }
 }

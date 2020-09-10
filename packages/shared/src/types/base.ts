@@ -1,6 +1,6 @@
 import { PortableReader, PortableWriter, Portable } from 'hazelcast-client';
-import { log } from '../../logger';
-import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from '../cacheConstants';
+import { log } from '../logger';
+import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from '../cache/cacheConstants';
 
 export class BaseType implements Portable {
   factoryId: number = FACTORY_ID;

@@ -5,9 +5,25 @@ declare namespace WSS {
     filter: string;
   }
 
+  interface ResponseDataTransaction {
+      add: {
+        [key: string]: any
+      };
+      update: {
+        [key: string]: any
+      };
+      remove: {
+        [key: string]: any
+      };
+  }
+
   interface Response {
     type: import("../src/enums").WsResponseType;
-    data: any;
+    data: {
+      add: any[],
+      update: any[],
+      remove: any[],
+    };
   }
 
   interface MapSubscriptions {

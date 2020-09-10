@@ -22,7 +22,7 @@ export class WsServer {
   };
 
   onConnect = (socket: any, request: http.IncomingMessage) => {
-    this.log.info("Received a connection");
+    this.log.info("Received a connection ");
     new Socket(socket);
   };
 }

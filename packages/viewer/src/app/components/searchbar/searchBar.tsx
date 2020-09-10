@@ -1,16 +1,13 @@
 import React, { useRef } from 'react';
 import { objectToQueryString } from 'shared/src/utils';
-import { WsRequestType, Env } from 'shared/src/enums';
+import { Env } from 'shared/src/enums';
 import styles from './searchBar.module.scss';
 import { useHistory } from 'react-router';
-
-export const MAP_LIST = ['order', 'others'];
-export const ENVIRONMENTS = [Env.Prod, Env.QA, Env.Dev];
+import { CacheMap } from 'shared/src/types/cacheMap';
 
 export const SearchBar = (props: SearchBar.Props) => {
   const history = useHistory();
   const { query } = props;
-  console.log(props);
   const selectEl = useRef<HTMLSelectElement | null>();
   const mapEl = useRef<HTMLSelectElement | null>();
   const filterEl = useRef<HTMLInputElement | null>();
@@ -36,9 +33,9 @@ export const SearchBar = (props: SearchBar.Props) => {
           defaultValue={query.env}
           ref={(dom) => (selectEl.current = dom)}
         >
-          {ENVIRONMENTS.map((env) => {
+          {Object.keys(Env).map((env) => {
             return (
-              <option key={env} value={env}>
+              <option key={env} value={Env[env as keyof typeof Env]}>
                 {env}
               </option>
             );
@@ -53,9 +50,9 @@ export const SearchBar = (props: SearchBar.Props) => {
           defaultValue={query.map}
           ref={(dom) => (mapEl.current = dom)}
         >
-          {MAP_LIST.map((map) => {
+          {Object.keys(CacheMap).map((map) => {
             return (
-              <option key={map} value={map}>
+              <option key={map} value={CacheMap[map as keyof typeof CacheMap]}>
                 {map}
               </option>
             );
