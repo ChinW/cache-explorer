@@ -12,7 +12,7 @@ export class CacheWebsocket {
   }
 
   init = async (env: Environment) => {
-    this.socket = new WebSocket('ws://localhost:9999');
+    this.socket = new WebSocket('ws://0.0.0.0:9999');
     this.socketState = WebSocket.OPEN;
     return new Promise((resolve) => {
       this.socket!!.addEventListener('open', (event: Event) => {
