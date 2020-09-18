@@ -44,9 +44,9 @@ export const Explorer = (props: Explorer.Props) => {
   React.useEffect(() => {
     const initWebsocket = async () => {
       setGridColumns([]);
-      if (gridApi) {
-        gridApi.setRowData([]);
-      }
+      // if (gridApi) {
+      //   gridApi.setRowData([]); // fixme
+      // }
       await websocket.init(locationQuery.env);
       websocket.subscribeOnMessage((response: StreamServer.Response) => {
         dispatch(response);
@@ -118,7 +118,6 @@ export const Explorer = (props: Explorer.Props) => {
           pivotPanelShow={'always'}
           pivotColumnGroupTotals={'after'}
           pivotRowTotals={'before'}
-          rowData={[]}
           onGridReady={onGridReady}
           deltaRowDataMode={true}
           getRowNodeId={(data: Order) => {
