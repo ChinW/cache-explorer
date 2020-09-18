@@ -1,18 +1,18 @@
 
-export enum Env {
-    Prod = "prod",
+export enum Environment {
+    PROD = "prod",
     QA = "qa",
-    Dev = "dev"
+    DEV = "dev"
 }
 
-export enum WsResponseType {
-    InitData = "InitData",
-    DeltaData = "DeltaData",
-    Notificaiton = "Notification"
+export enum WsRequestAction {
+    None = "none",
+    Init = "init",
+    Subscribe = "subscribe"
 }
 
-export enum WsRequestType {
-    None = "None",
-    Subscribe = "Subscribe",
-    Query = "Query"
+export enum WsResponseAction {
+    InitData = "initData",
+    DeltaData = "delta",
+    Notificaiton = "notification"
 }

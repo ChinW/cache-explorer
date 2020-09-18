@@ -1,7 +1,7 @@
-import { BaseType } from './base';
+import { PortableBase } from './portableBase';
 import { CACHE_TYPE_CLASS_ID } from '../cache/cacheConstants';
 
-export class Client extends BaseType {
+export class Client extends PortableBase {
   id: string = '';
   name: string = '';
 

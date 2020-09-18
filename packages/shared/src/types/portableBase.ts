@@ -2,7 +2,7 @@ import { PortableReader, PortableWriter, Portable } from 'hazelcast-client';
 import { log } from '../logger';
 import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from '../cache/cacheConstants';
 
-export class BaseType implements Portable {
+export class PortableBase implements Portable {
   factoryId: number = FACTORY_ID;
   classId: number;
 
@@ -19,7 +19,7 @@ export class BaseType implements Portable {
 
   isPortableField = (fieldName: string): boolean => {
     // @ts-ignore
-    return BaseType.isPrototypeOf(this[fieldName]) || this[fieldName] instanceof BaseType;
+    return PortableBase.isPrototypeOf(this[fieldName]) || this[fieldName] instanceof PortableBase;
   };
 
   setValueForField(fieldName: string, value: any) {
