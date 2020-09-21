@@ -44,9 +44,9 @@ export const Explorer = (props: Explorer.Props) => {
   React.useEffect(() => {
     const initWebsocket = async () => {
       setGridColumns([]);
-      // if (gridApi) {
-      //   gridApi.setRowData([]); // fixme
-      // }
+      if (gridApi) {
+        gridApi.applyTransaction({});
+      }
       await websocket.init(locationQuery.env);
       websocket.subscribeOnMessage((response: StreamServer.Response) => {
         dispatch(response);
