@@ -22,7 +22,11 @@
   },
   "homepage": "https://github.com/ChinW/hazelcast-explorer#readme",
   "dependencies": {
+    "@grpc/grpc-js": "^1.1.7",
+    "@grpc/proto-loader": "^0.5.5",
+    "apollo-server": "^2.18.2",
     "bunyan": "^1.8.14",
+    "graphql": "^15.3.0",
     "hazelcast-client": "^4.0.0-alpha.1",
     "lodash": "^4.17.19",
     "shared": "^1.0.0",

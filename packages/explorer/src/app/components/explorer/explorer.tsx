@@ -38,15 +38,15 @@ export const Explorer = (props: Explorer.Props) => {
   const [gridColumns, setGridColumns] = React.useState<CacheGrid.Column[]>([]);
   const [gridColumnApi, setGridColumnApi] = React.useState<ColumnApi>();
   const [gridApi, setGridApi] = React.useState<GridApi>();
+  const latestGridApi = React.useRef(gridApi);
+  latestGridApi.current = gridApi;
   const [state, dispatch] = React.useReducer(wsDataReducer, initialState);
   const { websocket } = state;
 
   React.useEffect(() => {
     const initWebsocket = async () => {
       setGridColumns([]);
-      if (gridApi) {
-        gridApi.applyTransaction({});
-      }
+      latestGridApi.current?.applyTransaction({});
       await websocket.init(locationQuery.env);
       websocket.subscribeOnMessage((response: StreamServer.Response) => {
         dispatch(response);
@@ -67,13 +67,13 @@ export const Explorer = (props: Explorer.Props) => {
   }, [locationQuery.map, locationQuery.filter]);
 
   React.useEffect(() => {
-    if (state.response && gridColumnApi && gridApi) {
-      gridApi.applyTransaction(state.response.data);
-      if (state.response.type === WsResponseAction.InitData) {
-        gridColumnApi.autoSizeAllColumns();
-        if (state.response.data.add.length > 0) {
-          setGridColumns(extractColumns(_.get(state, 'response.data.add[0]', {})));
-        }
+    latestGridApi.current?.applyTransaction(state.response?.data || {});
+    if (state.response?.type === WsResponseAction.InitData) {
+      setTimeout(() => {
+        gridColumnApi?.autoSizeAllColumns();
+      }, 2000)
+      if (state.response.data.add.length > 0) {
+        setGridColumns(extractColumns(_.get(state, 'response.data.add[0]', {})));
       }
     }
   }, [state.response]);
