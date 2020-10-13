@@ -1,14 +1,9 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, gql } from 'apollo-server';
+import { typeDefs } from './schema';
+import { resolvers } from './resolvers';
 
-const server = new ApolloServer({
-  context: ({ req }) => {
-    const token = req.headers.authorization || '';
-    const userID = '1';
-    return { userID };
-  }
-});
+const server = new ApolloServer({ typeDefs, resolvers });
 
-const port = process.env.PORT || 4000;
-server.listen({ port }).then(({ url }) => {
-  console.log(`Apollo Server ready at ${url}`);
+server.listen().then(({ url }) => {
+  console.log(`Apollo server ready at ${url}`);
 });

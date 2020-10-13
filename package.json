@@ -2,6 +2,10 @@
   "name": "root",
   "private": true,
   "useWorkspaces": true,
+  "scripts": {
+    "boot": "lerna bootstrap",
+    "boot:h": "lerna bootstrap --hoist"
+  },
   "devDependencies": {
     "lerna": "^3.22.1"
   }

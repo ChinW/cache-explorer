@@ -1,18 +1,21 @@
 module.exports = (api) => {
-  console.log("babel config loaded");
+  console.log('babel config loaded');
   api.cache(true);
   return {
     presets: [
+      ['@babel/preset-typescript', { allowNamespaces: true }],
       [
-        "@babel/preset-env",
+        '@babel/preset-env',
         {
           targets: {
-            browsers: ["last 2 Chrome versions"],
-          },
-        },
-      ],
-      ["@babel/preset-typescript", { allowNamespaces: true }],
+            node: true
+          }
+        }
+      ]
     ],
-    plugins: [["@babel/plugin-proposal-class-properties", { loose: true }]],
+    plugins: [
+      ['@babel/plugin-proposal-class-properties', { loose: true }]
+      // , 'babel-plugin-import-graphql'
+    ]
   };
 };
