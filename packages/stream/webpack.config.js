@@ -5,7 +5,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 module.exports = {
   entry: {
     stream: './src/stream/index.ts',
-    rpc: './src/rpc/server.ts',
     apollo: './src/apollo/server.ts'
   },
   mode: 'development',
