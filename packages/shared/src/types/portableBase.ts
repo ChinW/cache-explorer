@@ -97,7 +97,6 @@ export class PortableBase implements Portable {
           if (this.isPortableField(key)) {
             this.setValueForField(key, input.readPortable(key));
           } else {
-             // @ts-ignore
             // @ts-ignore
             switch (typeof this[key]) {
               case 'number': {
