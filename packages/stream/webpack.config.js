@@ -46,11 +46,6 @@ module.exports = {
       typescript: {
         configFile: path.resolve(__dirname, './tsconfig.json')
       }
-    }),
-    new NodemonPlugin({
-      execMap: {
-        js: 'node --harmony'
-      }
     })
   ]
 };

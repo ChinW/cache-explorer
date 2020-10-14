@@ -1,8 +1,6 @@
 import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
-
-  
   type Order {
     id: String
     quantity: Float
@@ -16,7 +14,6 @@ export const typeDefs = gql`
     price: Float
     country: String
   }
-
 
   type Query {
     orders: [Order]

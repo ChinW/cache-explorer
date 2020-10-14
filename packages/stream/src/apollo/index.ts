@@ -9,5 +9,5 @@ const server = new ApolloServer({
 
 server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Apollo server ready at ${url}`);
-  console.log(`Apollo subscriptionsUrl ready at ${subscriptionsUrl}`);
+  console.log(`Apollo subscription ready at ${subscriptionsUrl}`);
 });
