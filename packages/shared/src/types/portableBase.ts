@@ -43,6 +43,15 @@ export class PortableBase implements Portable {
     return obj;
   };
 
+  fromObject = (obj: {[key: string]: any}) => {
+    for (const key in obj) {
+      if(this.isValidField(key)) {
+        // @ts-ignore
+        this[key] = obj[key]
+      }
+    }
+  }
+
   writePortable = (output: PortableWriter) => {
     for (const key of Object.keys(this)) {
       if (this.isValidField(key)) {

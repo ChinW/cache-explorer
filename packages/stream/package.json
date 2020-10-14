@@ -11,10 +11,11 @@
   "author": "chi",
   "license": "ISC",
   "dependencies": {
+    "apollo-datasource": "^0.7.2",
     "apollo-server": "^2.18.2",
     "bunyan": "^1.8.14",
     "graphql": "^15.3.0",
-    "hazelcast-client": "^4.0.0-alpha.1",
+    "hazelcast-client": "^4.0.0",
     "lodash": "^4.17.19",
     "shared": "^1.0.0",
     "ws": "^7.3.1"

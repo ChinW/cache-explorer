@@ -9,6 +9,9 @@ export const getClientConfig = (env: Environment): ClientConfig => {
       },
       serialization: {
         portableFactories: PORTABLE_FACTORIES
+      },
+      connectionStrategy: {
+        asyncStart: false
       }
     };
     switch (env) {

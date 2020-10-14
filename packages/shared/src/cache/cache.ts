@@ -34,7 +34,7 @@ export class Cache {
       }
       return null;
     } catch (err) {
-      log.error(err);
+      log.error("Failure in getMap", err);
       return null;
     }
   };
@@ -52,6 +52,20 @@ export class Cache {
     } catch (err) {
       log.error('Failure in getValues', err);
       return [];
+    }
+  };
+
+  setValue = async (mapName: string, key: string, value: any): Promise<any> => {
+    try {
+      if (mapName.length > 0) {
+        const map = await this.getMap(mapName);
+        await map.put(key, value);
+        return value;
+      }
+      return null;
+    } catch (err) {
+      log.error('Failure in setValue', err);
+      return null;
     }
   };
 }
