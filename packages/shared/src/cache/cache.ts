@@ -35,7 +35,7 @@ export class Cache {
       }
       return null;
     } catch (err) {
-      log.error('Failure in getMap', err);
+      log.error('Failure in getMap: %s', err);
       return null;
     }
   };
@@ -48,7 +48,7 @@ export class Cache {
       const results = values.toArray();
       return results;
     } catch (err) {
-      log.error('Failure in getValues', err);
+      log.error('Failure in getValues: %s', err);
       return [];
     }
   };
@@ -59,7 +59,7 @@ export class Cache {
       await map.putAll(items.map((item) => [item.getKey(), item]));
       return items;
     } catch (err) {
-      log.error('Failure in setValue', err);
+      log.error('Failure in setValue: %s', err);
       return null;
     }
   };
@@ -86,7 +86,7 @@ export class Cache {
       }
       await map.putAll(entries);
     } catch (err) {
-      log.error('Failure in setValue', err);
+      log.error('Failure in setValue: %s', err);
     } finally {
       return {
         success,

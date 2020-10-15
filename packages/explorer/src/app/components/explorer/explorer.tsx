@@ -47,7 +47,7 @@ export const Explorer = (props: Explorer.Props) => {
     const initWebsocket = async () => {
       setGridColumns([]);
       latestGridApi.current?.applyTransaction({});
-      await websocket.init(locationQuery.env);
+      await websocket.init(locationQuery.env, window.location);
       websocket.subscribeOnMessage((response: StreamServer.Response) => {
         dispatch(response);
       });
@@ -60,14 +60,17 @@ export const Explorer = (props: Explorer.Props) => {
   }, [dispatch, locationQuery.env]);
 
   React.useEffect(() => {
+    latestGridApi.current?.applyTransaction(state.response?.data || {});
     if (websocket.socket?.readyState === WebSocket.OPEN) {
       websocket.subscribeMap(locationQuery.map, locationQuery.filter);
     }
-    return () => {};
+    return () => {
+      latestGridApi.current?.applyTransaction(state.response?.data || {});
+    };
   }, [locationQuery.map, locationQuery.filter]);
 
   React.useEffect(() => {
-    latestGridApi.current?.applyTransaction(state.response?.data || {});
+
     if (state.response?.type === WsResponseAction.InitData) {
       setTimeout(() => {
         gridColumnApi?.autoSizeAllColumns();

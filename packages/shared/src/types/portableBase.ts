@@ -21,7 +21,7 @@ export class PortableBase implements Portable {
   isValidField = (fieldName: string): boolean => {
     // @ts-ignore
     const field = this[fieldName];
-    const blacklistFields = ['CACHE_MAP', 'factoryId', 'classId'];
+    const blacklistFields = ['factoryId', 'classId'];
     return typeof field !== 'function' && !blacklistFields.includes(fieldName);
   };
 
@@ -94,7 +94,7 @@ export class PortableBase implements Portable {
           }
         } catch (e) {
           // @ts-ignore
-          log.error('unable to write', key, typeof this[key], e);
+          log.error('unable to write: %s, %s, %s', key, typeof this[key], e);
         }
       }
     }
@@ -130,7 +130,7 @@ export class PortableBase implements Portable {
           }
         } catch(e) {
           // @ts-ignore
-          log.error('Unable to read', key, typeof this[key], e);
+          log.error('Unable to read: %s, %s, %s', key, typeof this[key], e);
         }
       }
     }

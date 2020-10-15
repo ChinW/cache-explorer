@@ -11,8 +11,13 @@ export class CacheWebsocket {
     console.log('Created webscoket');
   }
 
-  init = async (env: Environment) => {
-    this.socket = new WebSocket('ws://0.0.0.0:9999');
+  init = async (env: Environment, location: Location) => {
+    if(env !== Environment.PROD) {
+      this.socket = new WebSocket('ws://locahost:9999');
+    } else {
+      this.socket = new WebSocket(`ws://${location.host}/stream`);
+    }
+    
     this.socketState = WebSocket.OPEN;
     return new Promise((resolve) => {
       this.socket!!.addEventListener('open', (event: Event) => {
