@@ -3,8 +3,10 @@ import { PortableBase } from 'shared/src/types/portableBase';
 import { Cache } from 'shared/src/cache/cache';
 import { Environment } from 'shared/src/enums';
 import _ from 'lodash';
+import { getProccessArgs } from 'shared/src/utils';
 
-const cacheClient = new Cache(Environment.DEV);
+const processArgs = getProccessArgs(); 
+const cacheClient = new Cache(processArgs.env);
 
 const createTypeDefs = (typeName: string, typeDefinition: string) => {
   return gql`

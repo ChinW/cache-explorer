@@ -1,5 +1,7 @@
 import _ from "lodash";
-
+ // @ts-ignore
+import commandLineArgs from 'command-line-args';
+import { Environment } from "./enums";
 export const objectToQueryString = (obj: { [key: string]: any }) => {
   var qs = _.reduce(
     obj,
@@ -9,4 +11,12 @@ export const objectToQueryString = (obj: { [key: string]: any }) => {
     ""
   ).slice(0, -1);
   return qs;
+};
+
+export const getProccessArgs = (): {
+  env: Environment
+} => {
+  return commandLineArgs([
+    {name: 'env', type: String, defaultValue: Environment.DEV}
+  ])
 };
