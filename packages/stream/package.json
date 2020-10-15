@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "webpack --watch",
     "dev:log": "webpack --watch | ./node_modules/.bin/bunyan -o short",
-    "run:stream": "nodemon --exec \"node -harmony\" --watch ./build/stream.js build/stream.js",
-    "run:apollo": "nodemon --exec \"node -harmony\" --watch ./build/apollo.js build/apollo.js",
+    "m:stream": "nodemon --exec \"node -harmony\" --watch ./build/stream.js build/stream.js",
+    "m:apollo": "nodemon --exec \"node -harmony\" --watch ./build/apollo.js build/apollo.js",
+    "r:apollo": "node -harmony build/apollo.js | ./node_modules/.bin/bunyan -o short",
     "build": "webpack"
   },
   "author": "chi",
@@ -34,7 +35,7 @@
     "babel-loader": "^8.1.0",
     "fork-ts-checker-webpack-plugin": "^5.0.7",
     "nodemon": "^2.0.5",
-    "typescript": "^4.0.2",
+    "typescript": "^4.0.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   },

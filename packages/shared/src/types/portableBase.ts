@@ -10,6 +10,14 @@ export class PortableBase implements Portable {
     this.classId = classId;
   }
 
+  getKey = (): string => {
+    return "";
+  }
+
+  generateKey = (): string => {
+    return "";
+  }
+
   isValidField = (fieldName: string): boolean => {
     // @ts-ignore
     const field = this[fieldName];
@@ -43,7 +51,7 @@ export class PortableBase implements Portable {
     return obj;
   };
 
-  acceptUpdate = (obj: {[key: string]: any}) => {
+  acceptUpdate = (obj: Dict) => {
     for (const key in obj) {
       if(this.isValidField(key)) {
         // @ts-ignore
@@ -122,7 +130,7 @@ export class PortableBase implements Portable {
           }
         } catch(e) {
           // @ts-ignore
-          log.error('unable to read', key, typeof this[key], e);
+          log.error('Unable to read', key, typeof this[key], e);
         }
       }
     }

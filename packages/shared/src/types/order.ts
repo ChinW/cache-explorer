@@ -8,8 +8,16 @@ export class Order extends PortableBase {
   price: number = 0.0;
   country: string = "";
   client: Client = new Client();
+  createdAt: string = "";
 
   constructor() {
     super(CACHE_TYPE_CLASS_ID.ORDER);
+  }
+
+  getKey = (): string => this.id;
+
+  generateKey = (): string => {
+    this.id = `order_${Math.random()}`
+    return this.id;
   }
 }

@@ -8,6 +8,7 @@ module.exports = {
   },
   mode: 'development',
   target: 'node',
+  devtool: 'eval-cheap-source-map',
   module: {
     rules: [
       {
@@ -20,7 +21,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: false
+            cacheDirectory: true
           }
         }
       },

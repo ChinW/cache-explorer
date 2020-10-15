@@ -1,10 +1,12 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer, makeExecutableSchema } from 'apollo-server';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: makeExecutableSchema({
+    typeDefs,
+    resolvers,
+  })
 });
 
 server.listen().then(({ url, subscriptionsUrl }) => {

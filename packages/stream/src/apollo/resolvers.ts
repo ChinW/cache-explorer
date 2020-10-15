@@ -1,4 +1,3 @@
-import { GraphQLScalarType, Kind } from 'graphql';
 import { Cache } from 'shared/src/cache/cache';
 import { Environment } from 'shared/src/enums';
 import { CacheMap } from 'shared/src/types/cacheMap';
@@ -8,9 +7,21 @@ import { PortableBase } from 'shared/src/types/portableBase';
 
 const cacheClient = new Cache(Environment.DEV);
 
+const createOrders = async (items: Dict[]): Promise<PortableBase[]> => {
+  const orders: PortableBase[] = [];
+  for (const item of items) {
+    const order = new Order();
+    order.acceptUpdate(item);
+    order.generateKey();
+    orders.push(order);
+  }
+  const result = await cacheClient.putAll(CacheMap.Order, orders);
+  return result;
+};
+
 export const resolvers = {
   Query: {
-    orders: async (): Promise<Array<PortableBase>> => {
+    orders: async (): Promise<PortableBase[]> => {
       try {
         const result = await cacheClient.getValues(CacheMap.Order, '');
         return result;
@@ -21,32 +32,35 @@ export const resolvers = {
     }
   },
   Mutation: {
-    updateOrder: async (
+    putOrders: async (
       parent: any,
       args: {
-        key: string;
-        update: {
-          [key: string]: any;
-        };
+        items: Dict[];
       }
-    ): Promise<Order> => {
-      const result = await cacheClient.update(CacheMap.Order, args.key, args.update);
-      return result as Order;
+    ): Promise<PortableBase[]> => {
+      return await createOrders(args.items);
     },
-    createOrder: async (
+    updateOrders: async (
       parent: any,
       args: {
-        key: string;
-        values: {
-          [key: string]: any;
-        };
+        pairs: KVPair<string, Dict>[];
+        // createIfAbsent: boolean;
       }
-    ): Promise<Order> => {
-      const order = new Order()
-      order.id = args.key
-      order.acceptUpdate(args.values)
-      const result = await cacheClient.put(CacheMap.Order, args.key, order);
-      return result as Order;
+    ): Promise<{
+      success: PortableBase[],
+      failure: Dict[]
+    }> => {
+      const { pairs } = args;
+      const updates: KV<String, Dict> = {};
+      for (const pair of pairs) {
+        updates[pair.key] = pair.value;
+      }
+      let result = await cacheClient.updateAll(CacheMap.Order, updates);
+      // if (result.failure.length > 0 && createIfAbsent) {
+      //   const payload = pairs.map((pair) => pair.value);
+      //   result = await createOrders(result.failure);
+      // }
+      return result;
     }
   }
 };

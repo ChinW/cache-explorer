@@ -40,61 +40,58 @@ export class Cache {
     }
   };
 
-  getValues = async (
-    mapName: string,
-    filter: string
-  ): Promise<Array<PortableBase>> => {
+  getValues = async (mapName: string, filter: string): Promise<Array<PortableBase>> => {
     try {
-      if (mapName.length > 0) {
-        const map = await this.getMap(mapName);
-        const values: ReadOnlyLazyList<PortableBase> =
-          filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
-        const results = values.toArray();
-        return results;
-      }
-      return [];
+      const map = await this.getMap(mapName);
+      const values: ReadOnlyLazyList<PortableBase> =
+        filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
+      const results = values.toArray();
+      return results;
     } catch (err) {
       log.error('Failure in getValues', err);
       return [];
     }
   };
 
-  put = async (mapName: string, key: string, value: PortableBase): Promise<PortableBase> => {
+  putAll = async (mapName: string, items: PortableBase[]): Promise<PortableBase[] | null> => {
     try {
-      if (mapName.length > 0) {
-        const map = await this.getMap(mapName);
-        await map.put(key, value);
-        return value;
-      }
-      return null;
+      const map = await this.getMap(mapName);
+      await map.putAll(items.map((item) => [item.getKey(), item]));
+      return items;
     } catch (err) {
       log.error('Failure in setValue', err);
       return null;
     }
   };
 
-  update = async (
+  updateAll = async (
     mapName: string,
-    key: string,
-    update: {
-      [key: string]: any;
-    }
-  ): Promise<PortableBase | null> => {
+    updates: KV<String, Dict>
+  ): Promise<{
+    success: PortableBase[];
+    failure: Dict[];
+  }> => {
+    const success: PortableBase[] = [];
+    const failure: Dict[] = [];
     try {
-      if (mapName.length > 0) {
-        const map = await this.getMap(mapName);
-        const entry: PortableBase = await map.get(key);
-        if (entry !== null) {
-          entry.acceptUpdate(update);
-          await map.set(key, entry);
-          return entry;
+      const map = await this.getMap(mapName);
+      const entries: [string, PortableBase][] = await map.getAll(Object.keys(updates));
+      for (const entry of entries) {
+        if (entry[1] !== null) {
+          entry[1].acceptUpdate(updates[entry[0]]);
+          success.push(entry[1]);
         } else {
-          throw Error('Key not exists');
+          failure.push(updates[entry[0]]);
         }
       }
+      await map.putAll(entries);
     } catch (err) {
       log.error('Failure in setValue', err);
-      return null;
+    } finally {
+      return {
+        success,
+        failure
+      };
     }
   };
 }
