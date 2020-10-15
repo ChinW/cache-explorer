@@ -3,8 +3,8 @@ import _ from 'lodash';
 import { childLog } from 'shared/src/logger';
 import { Cache } from 'shared/src/cache/cache';
 import { EntryEvent } from 'hazelcast-client';
-import { Order } from 'shared/src/types/order';
 import { WsRequestAction, Environment, WsResponseAction } from 'shared/src/enums';
+import { PortableBase } from 'shared/src/types/portableBase';
 
 export class Socket {
   log = childLog(Socket.name);
@@ -71,9 +71,9 @@ export class Socket {
         const map = await this.cacheClient.getMap(req.cacheMap);
         const listenId = await map.addEntryListener(
           {
-            added: (evt: EntryEvent<string, Order>) => this.onEntryChanged(evt, null, null),
-            updated: (evt: EntryEvent<string, Order>) => this.onEntryChanged(null, evt, null),
-            removed: (evt: EntryEvent<string, Order>) => this.onEntryChanged(null, null, evt)
+            added: (evt: EntryEvent<string, PortableBase>) => this.onEntryChanged(evt, null, null),
+            updated: (evt: EntryEvent<string, PortableBase>) => this.onEntryChanged(null, evt, null),
+            removed: (evt: EntryEvent<string, PortableBase>) => this.onEntryChanged(null, null, evt)
           },
           undefined,
           true
@@ -94,9 +94,9 @@ export class Socket {
   };
 
   onEntryChanged = (
-    add?: EntryEvent<string, Order>,
-    update?: EntryEvent<string, Order>,
-    remove?: EntryEvent<string, Order>
+    add?: EntryEvent<string, PortableBase>,
+    update?: EntryEvent<string, PortableBase>,
+    remove?: EntryEvent<string, PortableBase>
   ) => {
     if (add) {
       this.packageBuffer.add[add.key] = add.value;
@@ -114,11 +114,22 @@ export class Socket {
     });
   };
 
-  send = (type: WsResponseAction, data: StreamServer.DataTransaction) => {
+  send = (
+    type: WsResponseAction,
+    data: {
+      add: PortableBase[];
+      update: PortableBase[];
+      remove: PortableBase[];
+    }
+  ) => {
     this.socket.send(
       JSON.stringify({
         type,
-        data
+        data: {
+          add: data.add.map((i) => i.toObject()),
+          update: data.update.map((i) => i.toObject()),
+          remove: data.update.map((i) => i.toObject())
+        }
       })
     );
     this.packageBuffer = {

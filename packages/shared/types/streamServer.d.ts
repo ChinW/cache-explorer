@@ -14,13 +14,13 @@ declare namespace StreamServer {
 
   interface DataTransaction {
     add: {
-      [key: string]: any;
+      [key: string]: import('../src/types/portableBase').PortableBase;
     };
     update: {
-      [key: string]: any;
+      [key: string]: import('../src/types/portableBase').PortableBase;
     };
     remove: {
-      [key: string]: any;
+      [key: string]: import('../src/types/portableBase').PortableBase;
     };
   }
 

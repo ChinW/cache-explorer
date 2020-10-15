@@ -13,7 +13,7 @@ export class PortableBase implements Portable {
   isValidField = (fieldName: string): boolean => {
     // @ts-ignore
     const field = this[fieldName];
-    const blacklistFields = ['factoryId', 'classId'];
+    const blacklistFields = ['CACHE_MAP', 'factoryId', 'classId'];
     return typeof field !== 'function' && !blacklistFields.includes(fieldName);
   };
 
@@ -43,11 +43,13 @@ export class PortableBase implements Portable {
     return obj;
   };
 
-  fromObject = (obj: {[key: string]: any}) => {
+  acceptUpdate = (obj: {[key: string]: any}) => {
     for (const key in obj) {
       if(this.isValidField(key)) {
         // @ts-ignore
         this[key] = obj[key]
+      } else {
+        throw TypeError(`Unable to conver field: ${key}`)
       }
     }
   }
