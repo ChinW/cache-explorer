@@ -1,18 +1,20 @@
-export enum CacheMap {
-    Order = "order",
+import { Client } from './client';
+import { Order } from './order';
+
+export enum CacheType {
+  ORDER = "order",
+  CLIENT = "client"
 }
 
-// Todo
-// export interface CacheMapType {
-//     name: string;
-//     classType: new () => PortableBase;
-//   }
-  
-//   export const CacheMap: {
-//     [key: string]: CacheMapType;
-//   } = {
-//     ORDER: {
-//       name: 'order',
-//       classType: Order
-//     }
-//   };
+export const CacheMap: {
+  [key in keyof typeof CacheType]?: Cache.CacheMap
+} = {
+  ORDER: {
+    name: CacheType.ORDER,
+    typeConstructor: Order
+  },
+  CLIENT: {
+    name: CacheType.CLIENT,
+    typeConstructor: Client
+  }
+};

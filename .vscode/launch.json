@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "apollo",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "${workspaceRoot}/packages/stream",
+            "program": "${workspaceFolder}/packages/stream/src/apollo/index.ts",
+            "args": [
+            ],
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/packages/stream/build/apollo.js"
+            ]
+        }
+    ]
+}

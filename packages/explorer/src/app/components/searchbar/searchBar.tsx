@@ -43,17 +43,17 @@ export const SearchBar = (props: SearchBar.Props) => {
         </select>
       </div>
       <div className={styles.filterItem}>
-        <label>CacheMap</label>
+        <label>Cache</label>
         <select
           className="text-gray-700 h-full bg-blue-100 text-xs mr-1 shadow borded"
           name="env"
           defaultValue={query.map}
           ref={(dom) => (mapEl.current = dom)}
         >
-          {Object.keys(CacheMap).map((map) => {
+          {Object.values(CacheMap).map((cache) => {
             return (
-              <option key={map} value={CacheMap[map as keyof typeof CacheMap]}>
-                {map}
+              <option key={cache.name} value={cache.name}>
+                {cache.name}
               </option>
             );
           })}
@@ -61,12 +61,7 @@ export const SearchBar = (props: SearchBar.Props) => {
       </div>
       <div className={`${styles.filterItem} flex-grow`}>
         <label>Filter</label>
-        <input
-          type="text"
-          ref={(dom) => (filterEl.current = dom)}
-          defaultValue={query.filter}
-          className="flex-grow bg-blue-100"
-        />
+        <input type="text" ref={(dom) => (filterEl.current = dom)} defaultValue={query.filter} className="flex-grow bg-blue-100" />
       </div>
       <button className="btn btn-xs btn-blue" onClick={search}>
         Go

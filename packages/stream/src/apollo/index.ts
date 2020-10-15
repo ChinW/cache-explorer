@@ -1,12 +1,8 @@
-import { ApolloServer, makeExecutableSchema } from 'apollo-server';
-import { typeDefs } from './schema';
-import { resolvers } from './resolvers';
+import { ApolloServer, makeExecutableSchema, mergeSchemas } from 'apollo-server';
+import { schema } from './schema/schemaList';
 
 const server = new ApolloServer({
-  schema: makeExecutableSchema({
-    typeDefs,
-    resolvers,
-  })
+  schema
 });
 
 server.listen().then(({ url, subscriptionsUrl }) => {
