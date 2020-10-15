@@ -18,7 +18,7 @@ export class StreamServer {
       port: StreamServer.port,
     });
     this.server.on("connection", this.onConnect);
-    this.log.info("Cache stream server started at port", StreamServer.port);
+    this.log.info("Cache stream server started at port %d", StreamServer.port);
   };
 
   onConnect = (socket: any, request: http.IncomingMessage) => {

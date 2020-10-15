@@ -52,8 +52,8 @@ export const SearchBar = (props: SearchBar.Props) => {
         >
           {Object.values(CacheMap).map((cache) => {
             return (
-              <option key={cache.name} value={cache.name}>
-                {cache.name}
+              <option key={cache!.name} value={cache!.name}>
+                {cache!.name}
               </option>
             );
           })}

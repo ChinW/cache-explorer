@@ -1,4 +1,5 @@
 import { ApolloServer, makeExecutableSchema, mergeSchemas } from 'apollo-server';
+import { log } from 'shared/src/logger';
 import { schema } from './schema/schemaList';
 
 const server = new ApolloServer({
@@ -6,6 +7,6 @@ const server = new ApolloServer({
 });
 
 server.listen().then(({ url, subscriptionsUrl }) => {
-  console.log(`Apollo server ready at ${url}`);
-  console.log(`Apollo subscription ready at ${subscriptionsUrl}`);
+  log.info(`Apollo server ready at ${url}`);
+  log.info(`Apollo subscription ready at ${subscriptionsUrl}`);
 });

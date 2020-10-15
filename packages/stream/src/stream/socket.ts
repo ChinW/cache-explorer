@@ -59,7 +59,6 @@ export class Socket {
 
   onMessage = async (message: WebSocket.Data) => {
     let req = JSON.parse(message as string) as StreamServer.Request;
-    this.log.info(req);
     switch (req.action) {
       case WsRequestAction.Init: {
         this.cacheClient = new Cache(req.env);

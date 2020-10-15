@@ -1,6 +1,6 @@
 import { mergeSchemas } from 'apollo-server';
 import { CacheMap, CacheType } from 'shared/src/types/cacheMap';
-import { schemaFactory } from '../schema';
+import { schemaFactory } from './schemaFactory';
 
 const schemaList: {
   [key in keyof typeof CacheType]?: string;

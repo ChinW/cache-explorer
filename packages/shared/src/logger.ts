@@ -1,9 +1,17 @@
-import * as bunyan from "bunyan";
+import pino from 'pino';
 
-export const log = bunyan.createLogger({ name: "next-app" });
+export const log = pino({
+  name: 'App',
+  prettyPrint: {
+    levelFirst: true,
+      messageFormat: `{msg}`,
+    translateTime: `yymmmdd HH:MM:ss Z`,
+    ignore: "hostname",
+  }
+})
 
 export const childLog = (componentName: string) => {
   return log.child({
-    componentName,
-  });
+    name: componentName,
+  })
 };
