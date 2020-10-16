@@ -1,9 +1,9 @@
 import { FACTORY_ID } from "./cacheConstants";
 import { PortableFactory, Portable } from "hazelcast-client";
-import { CacheMap } from "./cacheMap";
+import { CacheType } from "./cacheMap";
 
 export const CachePortableFactory: PortableFactory = (classId: number): Portable => {
-  const type = CacheMap[classId].typeConstructor;
+  const type = CacheType[classId].typeConstructor;
   return type ? new type() : null;
 };
 

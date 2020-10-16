@@ -1,8 +1,8 @@
-import { CACHE_TYPE_CLASS_ID } from "shared/src/cache/cacheConstants"
+import { CacheMap } from "shared/src/cache/cacheMap"
 import { schemaFactory } from "./schemaFactory"
 
 export const clientSchema = schemaFactory(
-    CACHE_TYPE_CLASS_ID.CLIENT,
+    CacheMap.Client,
     `
     {
         id: String

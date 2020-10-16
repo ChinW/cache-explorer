@@ -1,11 +1,8 @@
 import { gql, makeExecutableSchema } from 'apollo-server';
 import { PortableBase } from 'shared/src/types/portableBase';
 import { Cache } from 'shared/src/cache/cache';
-import { Environment } from 'shared/src/enums';
 import _ from 'lodash';
 import { getProccessArgs } from 'shared/src/utils';
-import { CACHE_TYPE_CLASS_ID } from 'shared/src/cache/cacheConstants';
-import { CacheMap } from 'shared/src/cache/cacheMap';
 
 const processArgs = getProccessArgs(); 
 const cacheClient = new Cache(processArgs.env);
@@ -37,7 +34,7 @@ const createTypeDefs = (typeName: string, typeDefinition: string) => {
 const createPortableObject = async (cache: Cache.CacheMap, items: Dict[]): Promise<PortableBase[]> => {
   const objs: PortableBase[] = [];
   for (const item of items) {
-    const obj = new cache.typeConstructor();
+    const obj = new cache.type.typeConstructor();
     obj.acceptUpdate(item);
     obj.generateKey();
     objs.push(obj);
@@ -90,8 +87,7 @@ const createResolvers = (cache: Cache.CacheMap) => {
   };
 };
 
-export const schemaFactory = (classId: CACHE_TYPE_CLASS_ID, typeFields: string) => {
-  const cache = CacheMap[classId];
+export const schemaFactory = (cache: Cache.CacheMap, typeFields: string) => {
   const typeDefs = createTypeDefs(_.capitalize(cache.name), typeFields);
   const resolvers = createResolvers(cache);
   return makeExecutableSchema({

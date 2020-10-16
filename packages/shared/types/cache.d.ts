@@ -4,8 +4,13 @@ declare module Cache {
         toObject: () => {[key:string]: any}
     }
 
+    interface CacheType {
+        classId: number;
+        typeConstructor: new () => import("../src/types/portableBase").PortableBase;
+    }
+
     interface CacheMap {
         name: string;
-        typeConstructor: new () => import("../src/types/portableBase").PortableBase;
+        type: CacheType;
     }
 }

@@ -1,8 +1,9 @@
 import { CACHE_TYPE_CLASS_ID } from "shared/src/cache/cacheConstants"
+import { CacheMap } from "shared/src/cache/cacheMap"
 import { schemaFactory } from "./schemaFactory"
 
 export const orderSchema = schemaFactory(
-    CACHE_TYPE_CLASS_ID.ORDER,
+    CacheMap.Order,
     `
     {
         id: String
