@@ -4,6 +4,8 @@ import { Cache } from 'shared/src/cache/cache';
 import { Environment } from 'shared/src/enums';
 import _ from 'lodash';
 import { getProccessArgs } from 'shared/src/utils';
+import { CACHE_TYPE_CLASS_ID } from 'shared/src/cache/cacheConstants';
+import { CacheMap } from 'shared/src/cache/cacheMap';
 
 const processArgs = getProccessArgs(); 
 const cacheClient = new Cache(processArgs.env);
@@ -88,7 +90,8 @@ const createResolvers = (cache: Cache.CacheMap) => {
   };
 };
 
-export const schemaFactory = (cache: Cache.CacheMap, typeFields: string) => {
+export const schemaFactory = (classId: CACHE_TYPE_CLASS_ID, typeFields: string) => {
+  const cache = CacheMap[classId];
   const typeDefs = createTypeDefs(_.capitalize(cache.name), typeFields);
   const resolvers = createResolvers(cache);
   return makeExecutableSchema({

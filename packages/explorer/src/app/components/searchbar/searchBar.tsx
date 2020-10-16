@@ -3,7 +3,7 @@ import { objectToQueryString } from 'shared/src/utils';
 import { Environment } from 'shared/src/enums';
 import styles from './searchBar.module.scss';
 import { useHistory } from 'react-router';
-import { CacheMap } from 'shared/src/types/cacheMap';
+import { CacheMap } from 'shared/src/cache/cacheMap';
 
 export const SearchBar = (props: SearchBar.Props) => {
   const history = useHistory();
