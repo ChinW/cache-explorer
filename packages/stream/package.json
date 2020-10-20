@@ -13,6 +13,7 @@
   "author": "chi",
   "license": "ISC",
   "dependencies": {
+    "@graphql-tools/stitch": "^6.2.4",
     "apollo-datasource": "^0.7.2",
     "apollo-server": "^2.18.2",
     "graphql": "^15.3.0",

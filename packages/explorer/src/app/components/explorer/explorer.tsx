@@ -7,8 +7,8 @@ import { SearchBar } from '../searchbar/searchBar';
 import { WsResponseAction } from 'shared/src/enums';
 import { CacheWebsocket } from '../../lib/cacheWebsocket';
 import { extractColumns, getLocationQuery } from '../../lib/utils';
-import { Order } from 'shared/src/types/order';
 import { useLocation } from 'react-router';
+import { PortableBase } from 'shared/src/types/portableBase';
 
 const initialState: Explorer.Props = {
   response: undefined,
@@ -123,8 +123,8 @@ export const Explorer = (props: Explorer.Props) => {
           pivotRowTotals={'before'}
           onGridReady={onGridReady}
           deltaRowDataMode={true}
-          getRowNodeId={(data: Order) => {
-            return data.id;
+          getRowNodeId={(data: PortableBase) => {
+            return data.nxid;
           }}
         />
       </div>

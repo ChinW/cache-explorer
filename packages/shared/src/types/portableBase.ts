@@ -2,26 +2,21 @@ import { PortableReader, PortableWriter, Portable } from 'hazelcast-client';
 import { log } from '../logger';
 import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from '../cache/cacheConstants';
 
-export class PortableBase implements Portable {
+export abstract class PortableBase implements Portable {
   factoryId: number = FACTORY_ID;
   classId: number;
+  nxid: string = '';
 
   constructor(classId: CACHE_TYPE_CLASS_ID) {
     this.classId = classId;
   }
 
-  getKey = (): string => {
-    return "";
-  }
-
-  generateKey = (): string => {
-    return "";
-  }
+  abstract getIdentity(): string;
 
   isValidField = (fieldName: string): boolean => {
     // @ts-ignore
     const field = this[fieldName];
-    const blacklistFields = ['factoryId', 'classId'];
+    const blacklistFields = ['nxid', 'factoryId', 'classId'];
     return typeof field !== 'function' && !blacklistFields.includes(fieldName);
   };
 
@@ -53,14 +48,14 @@ export class PortableBase implements Portable {
 
   acceptUpdate = (obj: Dict) => {
     for (const key in obj) {
-      if(this.isValidField(key)) {
+      if (this.isValidField(key)) {
         // @ts-ignore
-        this[key] = obj[key]
+        this[key] = obj[key];
       } else {
-        throw TypeError(`Unable to conver field: ${key}`)
+        throw TypeError(`Unable to conver field: ${key}`);
       }
     }
-  }
+  };
 
   writePortable = (output: PortableWriter) => {
     for (const key of Object.keys(this)) {
@@ -88,7 +83,7 @@ export class PortableBase implements Portable {
                 break;
               }
               default: {
-                throw new Error("No fit type");
+                throw new Error('No fit type');
               }
             }
           }
@@ -98,6 +93,7 @@ export class PortableBase implements Portable {
         }
       }
     }
+    output.writeUTF('nxid', this.getIdentity());
   };
 
   readPortable = (input: PortableReader) => {
@@ -124,15 +120,16 @@ export class PortableBase implements Portable {
               }
               default: {
                 // @ts-ignore
-                throw new Error("no fit type");
+                throw new Error('no fit type');
               }
             }
           }
-        } catch(e) {
+        } catch (e) {
           // @ts-ignore
           log.error('Unable to read: %s, %s, %s', key, typeof this[key], e);
         }
       }
     }
+    this.setValueForField('nxid', input.readUTF('nxid'));
   };
 }

@@ -4,29 +4,32 @@ import { Cache } from 'shared/src/cache/cache';
 import _ from 'lodash';
 import { getProccessArgs } from 'shared/src/utils';
 
-const processArgs = getProccessArgs(); 
+const processArgs = getProccessArgs();
 const cacheClient = new Cache(processArgs.env);
 
-const createTypeDefs = (typeName: string, typeDefinition: string) => {
-  return gql`
-  type ${typeName} ${typeDefinition}
-  input ${typeName}Input ${typeDefinition}
-  input ${typeName}EntryInput {
+const createTypeDefs = (opts: { name: string; fields: string; editableFields?: string }) => {
+  const { name, fields } = opts;
+  const editable = opts.editableFields || fields;
+  return `
+  type ${name} ${fields}
+  
+  input editable${name} ${editable}
+  input editable${name}Entry {
     key: String
-    value: ${typeName}Input
+    value: editable${name}
   }
 
-  type ${typeName}UpdateResponse {
-    success: [${typeName}]
-    failure: [${typeName}]
+  type ${name}UpdateResponse {
+    success: [${name}]
+    failure: [${name}]
   }
 
   type Query {
-    ${typeName.toLowerCase()}: [${typeName}]
+    ${name.toLowerCase()}: [${name}]
   }
   type Mutation {
-    put${typeName}(items: [${typeName}Input!]!): [${typeName}]
-    update${typeName}(pairs: [${typeName}EntryInput!]): ${typeName}UpdateResponse 
+    put${name}(items: [editable${name}!]!): [${name}]
+    update${name}(pairs: [editable${name}Entry!]): ${name}UpdateResponse 
   }
   `;
 };
@@ -36,7 +39,6 @@ const createPortableObject = async (cache: Cache.CacheMap, items: Dict[]): Promi
   for (const item of items) {
     const obj = new cache.type.typeConstructor();
     obj.acceptUpdate(item);
-    obj.generateKey();
     objs.push(obj);
   }
   const result = await cacheClient.putAll(cache.name, objs);
@@ -87,11 +89,15 @@ const createResolvers = (cache: Cache.CacheMap) => {
   };
 };
 
-export const schemaFactory = (cache: Cache.CacheMap, typeFields: string) => {
-  const typeDefs = createTypeDefs(_.capitalize(cache.name), typeFields);
+export const schemaFactory = (cache: Cache.CacheMap, fields: string, editableFields: string = null) => {
+  const typeDefs = createTypeDefs({
+    name: _.capitalize(cache.name),
+    fields,
+    editableFields
+  });
   const resolvers = createResolvers(cache);
-  return makeExecutableSchema({
+  return {
     typeDefs,
     resolvers
-  });
+  };
 };

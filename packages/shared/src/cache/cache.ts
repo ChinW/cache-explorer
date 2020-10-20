@@ -1,4 +1,4 @@
-import { Client, IMap, Predicates } from 'hazelcast-client';
+import { Client, IMap, LifecycleState, Predicates } from 'hazelcast-client';
 import { ReadOnlyLazyList } from 'hazelcast-client/lib/core/ReadOnlyLazyList.js';
 import { getClientConfig } from './cacheClientConfig';
 import { log } from '../logger';
@@ -14,14 +14,29 @@ export class Cache {
   }
 
   initClient = async (): Promise<Client> => {
-    this.client = await Client.newHazelcastClient(getClientConfig(this.env));
+    const clientCfg = getClientConfig(this.env);
+    clientCfg.lifecycleListeners = [this.onClientLifeCycle];
+    this.client = await Client.newHazelcastClient(clientCfg);
     log.info('Hazelcast client initialized');
     return this.client;
+  };
+
+  onClientLifeCycle = (state: LifecycleState) => {
+    switch (state) {
+      case LifecycleState.DISCONNECTED:
+      case LifecycleState.SHUTTING_DOWN:
+      case LifecycleState.SHUTDOWN:
+        {
+          this.client = null;
+        }
+        break;
+    }
   };
 
   getClient = async (): Promise<Client> => {
     if (this.client === null) {
       await this.initClient();
+      this.client.getLifecycleService;
     }
     return this.client;
   };
@@ -56,7 +71,7 @@ export class Cache {
   putAll = async (mapName: string, items: PortableBase[]): Promise<PortableBase[] | null> => {
     try {
       const map = await this.getMap(mapName);
-      await map.putAll(items.map((item) => [item.getKey(), item]));
+      await map.putAll(items.map((item) => [item.getIdentity(), item]));
       return items;
     } catch (err) {
       log.error('Failure in setValue: %s', err);

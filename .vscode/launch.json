@@ -8,13 +8,11 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "cwd": "${workspaceRoot}/packages/stream",
             "program": "${workspaceFolder}/packages/stream/src/apollo/index.ts",
-            "args": [
-            ],
+            "args": [],
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/packages/stream/build/apollo.js"
+                "${workspaceFolder}/packages/stream/build/**/*.js"
             ]
         }
     ]

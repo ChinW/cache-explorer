@@ -12,7 +12,7 @@ export const getClientConfig = (env: Environment): ClientConfig => {
       },
       connectionStrategy: {
         asyncStart: false
-      }
+      },
     };
     switch (env) {
       case Environment.PROD:

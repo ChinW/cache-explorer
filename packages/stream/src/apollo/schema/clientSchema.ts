@@ -5,6 +5,7 @@ export const clientSchema = schemaFactory(
     CacheMap.Client,
     `
     {
+        nxid: String
         id: String
         name: String
     }

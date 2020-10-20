@@ -14,10 +14,7 @@ export class Order extends PortableBase {
     super(CACHE_TYPE_CLASS_ID.ORDER);
   }
 
-  getKey = (): string => this.id;
-
-  generateKey = (): string => {
-    this.id = `order_${Math.random()}`
+  getIdentity = (): string => {
     return this.id;
   }
 }

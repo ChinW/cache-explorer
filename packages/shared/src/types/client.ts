@@ -8,4 +8,6 @@ export class Client extends PortableBase {
   constructor() {
     super(CACHE_TYPE_CLASS_ID.CLIENT);
   }
+
+  getIdentity = () => this.id;
 }
