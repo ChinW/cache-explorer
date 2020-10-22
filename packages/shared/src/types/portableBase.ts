@@ -14,10 +14,9 @@ export abstract class PortableBase implements Portable {
   abstract getIdentity(): string;
 
   isValidField = (field: string): boolean => {
-    // @ts-ignore
-    const field = this[field];
+    const value = this.getThis(field);
     const blacklistFields = ['nxid', 'factoryId', 'classId'];
-    return typeof field !== 'function' && !blacklistFields.includes(field);
+    return typeof value !== 'function' && !blacklistFields.includes(field);
   };
 
   isPortable = (value: any): boolean => {
