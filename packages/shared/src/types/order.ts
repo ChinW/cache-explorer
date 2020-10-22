@@ -3,11 +3,12 @@ import { PortableBase } from "./portableBase";
 import { Client } from "./client";
 
 export class Order extends PortableBase {
+  groupId: number = 0.0;
   id: string = "";
   quantity: number = 0.0;
   price: number = 0.0;
   country: string = "";
-  client: Client = new Client();
+  clients: Array<Client> = [];
   createdAt: string = "";
 
   constructor() {

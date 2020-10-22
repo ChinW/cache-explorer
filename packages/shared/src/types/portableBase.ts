@@ -13,33 +13,46 @@ export abstract class PortableBase implements Portable {
 
   abstract getIdentity(): string;
 
-  isValidField = (fieldName: string): boolean => {
+  isValidField = (field: string): boolean => {
     // @ts-ignore
-    const field = this[fieldName];
+    const field = this[field];
     const blacklistFields = ['nxid', 'factoryId', 'classId'];
-    return typeof field !== 'function' && !blacklistFields.includes(fieldName);
+    return typeof field !== 'function' && !blacklistFields.includes(field);
   };
 
-  isPortableField = (fieldName: string): boolean => {
-    // @ts-ignore
-    return PortableBase.isPrototypeOf(this[fieldName]) || this[fieldName] instanceof PortableBase;
+  isPortable = (value: any): boolean => {
+    return PortableBase.isPrototypeOf(value) || value instanceof PortableBase;
   };
 
-  setValueForField(fieldName: string, value: any) {
+  // @ts-ignore
+  isPortableField = (field: string): boolean => this.isPortable(this[field]);
+
+  setValue = (field: string, value: any) => {
     // @ts-ignore
-    this[fieldName] = value;
-  }
+    this[field] = value;
+  };
+
+  getThis = (field: string) => {
+    // @ts-ignore
+    return this[field];
+  };
 
   toObject = () => {
     const obj: any = {};
     for (const key of Object.keys(this)) {
       if (this.isValidField(key)) {
-        // @ts-ignore
-        const field = this[key];
+        const value = this.getThis(key);
         if (this.isPortableField(key)) {
-          obj[key] = field.toObject();
+          obj[key] = value.toObject();
+        } else if (Array.isArray(value)) {
+          obj[key] = value.map((v) => {
+            if (this.isPortable(v)) {
+              return v.toObject();
+            }
+            return v;
+          });
         } else {
-          obj[key] = field;
+          obj[key] = value;
         }
       }
     }
@@ -49,8 +62,7 @@ export abstract class PortableBase implements Portable {
   acceptUpdate = (obj: Dict) => {
     for (const key in obj) {
       if (this.isValidField(key)) {
-        // @ts-ignore
-        this[key] = obj[key];
+        this.setValue(key, obj[key]);
       } else {
         throw TypeError(`Unable to conver field: ${key}`);
       }
@@ -60,27 +72,48 @@ export abstract class PortableBase implements Portable {
   writePortable = (output: PortableWriter) => {
     for (const key of Object.keys(this)) {
       if (this.isValidField(key)) {
+        const value = this.getThis(key);
         try {
           if (this.isPortableField(key)) {
-            // @ts-ignore
-            output.writePortable(key, this[key]);
+            output.writePortable(key, value);
           } else {
-            // @ts-ignore
-            switch (typeof this[key]) {
+            switch (typeof value) {
               case 'number': {
-                // @ts-ignore
-                output.writeDouble(key, this[key]);
+                output.writeDouble(key, value);
                 break;
               }
               case 'boolean': {
-                // @ts-ignore
-                output.writeBoolean(key, this[key]);
+                output.writeBoolean(key, value);
                 break;
               }
               case 'string': {
-                // @ts-ignore
-                output.writeUTF(key, this[key]);
+                output.writeUTF(key, value);
                 break;
+              }
+              case 'object': {
+                if (value.length > 0) {
+                  if (this.isPortable(value[0])) {
+                    output.writePortable(key, value);
+                  } else {
+                    switch (typeof value[0]) {
+                      case 'number': {
+                        output.writeDoubleArray(key, value);
+                        break;
+                      }
+                      case 'boolean': {
+                        output.writeBooleanArray(key, value);
+                        break;
+                      }
+                      case 'string': {
+                        output.writeUTFArray(key, value);
+                        break;
+                      }
+                      default: {
+                        throw new Error('No fit type');
+                      }
+                    }
+                  }
+                }
               }
               default: {
                 throw new Error('No fit type');
@@ -88,8 +121,7 @@ export abstract class PortableBase implements Portable {
             }
           }
         } catch (e) {
-          // @ts-ignore
-          log.error('unable to write: %s, %s, %s', key, typeof this[key], e);
+          log.error('unable to write: %s, %s, %s', key, typeof this.getThis(key), e);
         }
       }
     }
@@ -101,35 +133,35 @@ export abstract class PortableBase implements Portable {
       if (this.isValidField(key)) {
         try {
           if (this.isPortableField(key)) {
-            this.setValueForField(key, input.readPortable(key));
+            this.setValue(key, input.readPortable(key));
           } else {
-            // @ts-ignore
-            switch (typeof this[key]) {
+            switch (typeof this.getThis(key)) {
               case 'number': {
-                this.setValueForField(key, input.readDouble(key));
+                this.setValue(key, input.readDouble(key));
                 break;
               }
               case 'boolean': {
-                // @ts-ignore
-                this.setValueForField(key, input.readBoolean(key));
+                this.setValue(key, input.readBoolean(key));
                 break;
               }
               case 'string': {
-                this.setValueForField(key, input.readUTF(key));
+                this.setValue(key, input.readUTF(key));
+                break;
+              }
+              case 'object': {
+                this.setValue(key, input.readPortableArray(key));
                 break;
               }
               default: {
-                // @ts-ignore
                 throw new Error('no fit type');
               }
             }
           }
         } catch (e) {
-          // @ts-ignore
-          log.error('Unable to read: %s, %s, %s', key, typeof this[key], e);
+          log.error('Unable to read: %s, %s, %s', key, typeof this.getThis(key), e);
         }
       }
     }
-    this.setValueForField('nxid', input.readUTF('nxid'));
+    this.setValue('nxid', input.readUTF('nxid'));
   };
 }

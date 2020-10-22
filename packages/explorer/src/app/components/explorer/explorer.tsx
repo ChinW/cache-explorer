@@ -60,6 +60,10 @@ export const Explorer = (props: Explorer.Props) => {
   }, [dispatch, locationQuery.env]);
 
   React.useEffect(() => {
+    setGridColumns([]);
+  }, [locationQuery.map]);
+
+  React.useEffect(() => {
     latestGridApi.current?.applyTransaction(state.response?.data || {});
     if (websocket.socket?.readyState === WebSocket.OPEN) {
       websocket.subscribeMap(locationQuery.map, locationQuery.filter);
