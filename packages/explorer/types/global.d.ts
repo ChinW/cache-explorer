@@ -20,5 +20,6 @@ declare namespace CacheGrid {
     headerName: string;
     field?: string;
     children?: Column[];
+    filter: boolean;
   }
 }

@@ -14,7 +14,8 @@ export const extractColumns = (data: { [key: string]: any }, parent: string = ''
   const columns: CacheGrid.Column[] = _.keys(data).map(
     (fieldName: string): CacheGrid.Column => {
       const col: CacheGrid.Column = {
-        headerName: fieldName
+        headerName: fieldName,
+        filter: true
       };
       if (data[fieldName] && typeof data[fieldName] === 'object') {
         col.field = fieldName;
