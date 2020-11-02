@@ -13,7 +13,7 @@ export class CacheWebsocket {
 
   init = async (env: Environment, location: Location) => {
     if(env !== Environment.PROD) {
-      this.socket = new WebSocket('ws://locahost:9999');
+      this.socket = new WebSocket('ws://localhost:9999');
     } else {
       this.socket = new WebSocket(`ws://${location.host}/stream`);
     }

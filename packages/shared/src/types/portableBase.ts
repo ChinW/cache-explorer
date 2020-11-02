@@ -5,7 +5,7 @@ import { FACTORY_ID, CACHE_TYPE_CLASS_ID } from '../cache/cacheConstants';
 export abstract class PortableBase implements Portable {
   factoryId: number = FACTORY_ID;
   classId: number;
-  nxid: string = '';
+  nid: string = '';
 
   constructor(classId: CACHE_TYPE_CLASS_ID) {
     this.classId = classId;
@@ -15,7 +15,7 @@ export abstract class PortableBase implements Portable {
 
   isValidField = (field: string): boolean => {
     const value = this.getThis(field);
-    const blacklistFields = ['nxid', 'factoryId', 'classId'];
+    const blacklistFields = ['nid', 'factoryId', 'classId'];
     return typeof value !== 'function' && !blacklistFields.includes(field);
   };
 
@@ -37,7 +37,9 @@ export abstract class PortableBase implements Portable {
   };
 
   toObject = () => {
-    const obj: any = {};
+    const obj: any = {
+      nid: this.nid
+    };
     for (const key of Object.keys(this)) {
       if (this.isValidField(key)) {
         const value = this.getThis(key);
@@ -124,7 +126,7 @@ export abstract class PortableBase implements Portable {
         }
       }
     }
-    output.writeUTF('nxid', this.getIdentity());
+    output.writeUTF('nid', this.getIdentity());
   };
 
   readPortable = (input: PortableReader) => {
@@ -161,6 +163,6 @@ export abstract class PortableBase implements Portable {
         }
       }
     }
-    this.setValue('nxid', input.readUTF('nxid'));
+    this.setValue('nid', input.readUTF('nid'));
   };
 }

@@ -5,5 +5,5 @@ export const start = () => {
   const server = new StreamServer();
 };
 
-// start();
-cacheReadPerfTest();
+start();
+// cacheReadPerfTest();

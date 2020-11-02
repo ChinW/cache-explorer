@@ -3,8 +3,8 @@ import { PortableBase } from "./portableBase";
 import { Client } from "./client";
 
 export class Order extends PortableBase {
-  groupId: number = 0.0;
   id: string = "";
+  parent: string = "";
   quantity: number = 0.0;
   price: number = 0.0;
   country: string = "";

@@ -64,23 +64,31 @@ export const Explorer = (props: Explorer.Props) => {
   }, [locationQuery.map]);
 
   React.useEffect(() => {
-    latestGridApi.current?.applyTransaction(state.response?.data || {});
+    latestGridApi.current?.applyTransaction({});
     if (websocket.socket?.readyState === WebSocket.OPEN) {
       websocket.subscribeMap(locationQuery.map, locationQuery.filter);
     }
     return () => {
-      latestGridApi.current?.applyTransaction(state.response?.data || {});
+      latestGridApi.current?.setRowData([]);
     };
   }, [locationQuery.map, locationQuery.filter]);
 
   React.useEffect(() => {
-
+    latestGridApi.current?.applyTransaction(state.response?.data || {});
     if (state.response?.type === WsResponseAction.InitData) {
       setTimeout(() => {
         gridColumnApi?.autoSizeAllColumns();
-      }, 2000)
+      }, 2000);
       if (state.response.data.add.length > 0) {
-        setGridColumns(extractColumns(_.get(state, 'response.data.add[0]', {})));
+        setGridColumns(
+          extractColumns(
+            _.get(
+              state,
+              'response.data.add[0]',
+              extractColumns(_.get(state, 'response.data.update[0]', extractColumns(_.get(state, 'response.data.remove[0]', {}))))
+            )
+          )
+        );
       }
     }
   }, [state.response]);
@@ -128,7 +136,7 @@ export const Explorer = (props: Explorer.Props) => {
           onGridReady={onGridReady}
           deltaRowDataMode={true}
           getRowNodeId={(data: PortableBase) => {
-            return data.nxid;
+            return data.nid;
           }}
         />
       </div>

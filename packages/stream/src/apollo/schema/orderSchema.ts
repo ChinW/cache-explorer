@@ -6,9 +6,9 @@ import { schemaFactory } from './schemaFactory';
 
 export const orderFields = `
 {
-  nxid: String
-  groupId: Float
+  nid: String
   id: String!
+  parent: String!
   quantity: Float
   price: Float
   country: String

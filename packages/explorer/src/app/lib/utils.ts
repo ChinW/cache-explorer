@@ -17,11 +17,10 @@ export const extractColumns = (data: { [key: string]: any }, parent: string = ''
         headerName: fieldName,
         filter: true
       };
+      col.field = parent.length > 0 ? `${parent}.${fieldName}` : fieldName;
       if (data[fieldName] && typeof data[fieldName] === 'object') {
         col.field = fieldName;
-        col.children = extractColumns(data[fieldName], fieldName);
-      } else {
-        col.field = parent.length > 0 ? `${parent}.${fieldName}` : fieldName;
+        col.children = extractColumns(data[fieldName], col.field);
       }
       return col;
     }

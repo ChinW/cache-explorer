@@ -16,8 +16,12 @@ export const CacheType: KV<CACHE_TYPE_CLASS_ID, Cache.CacheType> = {
 export const CacheMap: {
   [key: string]: Cache.CacheMap
 } = {
-  Order: {
-    name: "order",
+  OrderSourceA: {
+    name: "orderA",
+    type: CacheType[CACHE_TYPE_CLASS_ID.ORDER]
+  },
+  OrderSourceB: {
+    name: "orderB",
     type: CacheType[CACHE_TYPE_CLASS_ID.ORDER]
   },
   Client: {

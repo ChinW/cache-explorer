@@ -6,23 +6,26 @@ import { EntryEvent } from 'hazelcast-client';
 import { WsRequestAction, Environment, WsResponseAction } from 'shared/src/enums';
 import { PortableBase } from 'shared/src/types/portableBase';
 
+type PackageBuffer = {
+  [key: string]: {
+    type: 'add' | 'update' | 'remove';
+    value: PortableBase;
+  };
+};
+
 export class Socket {
   log = childLog(Socket.name);
   id: string;
   socket: WebSocket;
   mapSubscriptions: StreamServer.MapSubscriptions = {};
-  packageBuffer: StreamServer.DataTransaction = {
-    add: {},
-    update: {},
-    remove: {}
-  };
+  packageBuffer: PackageBuffer = {};
   cacheClient: Cache = null;
-  throttledSend: (type: WsResponseAction, data: any) => void;
+  throttledSend: (data: PackageBuffer) => void;
 
   constructor(incomingSocket: WebSocket) {
     this.id = `socket_${new Date().getTime()}`;
     this.socket = incomingSocket;
-    this.throttledSend = _.throttle(this.send, 3000);
+    this.throttledSend = _.throttle(this.sendInBatch, 1500);
 
     this.socket.on('message', this.onMessage);
     this.socket.on('close', this.onClose);
@@ -98,19 +101,41 @@ export class Socket {
     remove?: EntryEvent<string, PortableBase>
   ) => {
     if (add) {
-      this.packageBuffer.add[add.key] = add.value;
+      this.packageBuffer[add.key] = {
+        type: 'add',
+        value: add.value
+      };
     }
     if (update) {
-      this.packageBuffer.update[update.key] = update.value;
+      this.packageBuffer[update.key] = {
+        type: 'update',
+        value: update.value
+      };
     }
     if (remove) {
-      this.packageBuffer.remove[remove.key] = remove.oldValue;
+      this.packageBuffer[remove.key] = {
+        type: 'remove',
+        value: remove.value
+      };
     }
-    this.throttledSend(WsResponseAction.DeltaData, {
-      add: _.values(this.packageBuffer.add),
-      update: _.values(this.packageBuffer.update),
-      remove: _.values(this.packageBuffer.remove)
-    });
+    this.throttledSend(this.packageBuffer);
+  };
+
+  sendInBatch = (data: PackageBuffer) => {
+    const payload: {
+      add: PortableBase[];
+      update: PortableBase[];
+      remove: PortableBase[];
+    } = {
+      add: [],
+      update: [],
+      remove: []
+    };
+    console.log(_.values(data));
+    for (const item of _.values(data)) {
+      payload[item.type].push(item.value);
+    }
+    this.send(WsResponseAction.DeltaData, payload);
   };
 
   send = (
@@ -127,14 +152,10 @@ export class Socket {
         data: {
           add: data.add.map((i) => i.toObject()),
           update: data.update.map((i) => i.toObject()),
-          remove: data.update.map((i) => i.toObject())
+          remove: data.remove.map((i) => i.toObject())
         }
       })
     );
-    this.packageBuffer = {
-      add: {},
-      update: {},
-      remove: {}
-    };
+    this.packageBuffer = {};
   };
 }
