@@ -19,8 +19,10 @@ export const extractColumns = (data: { [key: string]: any }, parent: string = ''
       };
       col.field = parent.length > 0 ? `${parent}.${fieldName}` : fieldName;
       if (data[fieldName] && typeof data[fieldName] === 'object') {
-        col.field = fieldName;
         col.children = extractColumns(data[fieldName], col.field);
+        if (col.children.length === 0) {
+          delete col.children;
+        }
       }
       return col;
     }

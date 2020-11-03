@@ -82,11 +82,7 @@ export const Explorer = (props: Explorer.Props) => {
       if (state.response.data.add.length > 0) {
         setGridColumns(
           extractColumns(
-            _.get(
-              state,
-              'response.data.add[0]',
-              extractColumns(_.get(state, 'response.data.update[0]', extractColumns(_.get(state, 'response.data.remove[0]', {}))))
-            )
+            _.get(state, 'response.data.add[0]', _.get(state, 'response.data.update[0]', _.get(state, 'response.data.remove[0]', {})))
           )
         );
       }
@@ -98,7 +94,6 @@ export const Explorer = (props: Explorer.Props) => {
     setGridApi(params.api);
     params.columnApi.autoSizeAllColumns();
   };
-
   return (
     <div className="flex flex-col w-full h-full">
       <SearchBar query={locationQuery} />

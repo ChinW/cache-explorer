@@ -131,7 +131,6 @@ export class Socket {
       update: [],
       remove: []
     };
-    console.log(_.values(data));
     for (const item of _.values(data)) {
       payload[item.type].push(item.value);
     }

@@ -70,43 +70,43 @@ export abstract class PortableBase implements Portable {
     }
   };
 
-  writePortable = (output: PortableWriter) => {
+  writePortable = (writer: PortableWriter) => {
     for (const key of Object.keys(this)) {
       if (this.isValidField(key)) {
         const value = this.getThis(key);
         try {
           if (this.isPortableField(key)) {
-            output.writePortable(key, value);
+            writer.writePortable(key, value);
           } else {
             switch (typeof value) {
               case 'number': {
-                output.writeDouble(key, value);
+                writer.writeDouble(key, value);
                 break;
               }
               case 'boolean': {
-                output.writeBoolean(key, value);
+                writer.writeBoolean(key, value);
                 break;
               }
               case 'string': {
-                output.writeUTF(key, value);
+                writer.writeUTF(key, value);
                 break;
               }
               case 'object': {
                 if (value.length > 0) {
                   if (this.isPortable(value[0])) {
-                    output.writePortable(key, value);
+                    writer.writePortable(key, value);
                   } else {
                     switch (typeof value[0]) {
                       case 'number': {
-                        output.writeDoubleArray(key, value);
+                        writer.writeDoubleArray(key, value);
                         break;
                       }
                       case 'boolean': {
-                        output.writeBooleanArray(key, value);
+                        writer.writeBooleanArray(key, value);
                         break;
                       }
                       case 'string': {
-                        output.writeUTFArray(key, value);
+                        writer.writeUTFArray(key, value);
                         break;
                       }
                       default: {
@@ -126,31 +126,36 @@ export abstract class PortableBase implements Portable {
         }
       }
     }
-    output.writeUTF('nid', this.getIdentity());
+    writer.writeUTF('nid', this.getIdentity());
   };
 
-  readPortable = (input: PortableReader) => {
+  readPortable = (reader: PortableReader) => {
     for (const key of Object.keys(this)) {
-      if (this.isValidField(key)) {
+      if (this.isValidField(key) && reader.hasField(key)) {
         try {
           if (this.isPortableField(key)) {
-            this.setValue(key, input.readPortable(key));
+            this.setValue(key, reader.readPortable(key));
           } else {
             switch (typeof this.getThis(key)) {
               case 'number': {
-                this.setValue(key, input.readDouble(key));
+                this.setValue(key, reader.readDouble(key));
                 break;
               }
               case 'boolean': {
-                this.setValue(key, input.readBoolean(key));
+                this.setValue(key, reader.readBoolean(key));
                 break;
               }
               case 'string': {
-                this.setValue(key, input.readUTF(key));
+                this.setValue(key, reader.readUTF(key));
                 break;
               }
               case 'object': {
-                this.setValue(key, input.readPortableArray(key));
+                // TODO: need to support read primitive array
+                if(key === 'sales') {
+                  this.setValue(key, reader.readUTFArray(key));
+                } else {
+                  this.setValue(key, reader.readPortableArray(key));
+                }
                 break;
               }
               default: {
@@ -163,6 +168,6 @@ export abstract class PortableBase implements Portable {
         }
       }
     }
-    this.setValue('nid', input.readUTF('nid'));
+    this.setValue('nid', reader.readUTF('nid'));
   };
 }

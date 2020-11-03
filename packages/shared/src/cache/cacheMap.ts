@@ -17,11 +17,11 @@ export const CacheMap: {
   [key: string]: Cache.CacheMap
 } = {
   OrderSourceA: {
-    name: "orderA",
+    name: "orderSourceA",
     type: CacheType[CACHE_TYPE_CLASS_ID.ORDER]
   },
   OrderSourceB: {
-    name: "orderB",
+    name: "orderSourceB",
     type: CacheType[CACHE_TYPE_CLASS_ID.ORDER]
   },
   Client: {
