@@ -8,7 +8,7 @@ export class Order extends PortableBase {
   quantity: number = 0.0;
   price: number = 0.0;
   country: string = "";
-  clients: Array<Client> = [];
+  client: Client = new Client();
   createdAt: string = "";
 
   constructor() {
