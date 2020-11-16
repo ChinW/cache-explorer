@@ -13,6 +13,9 @@ export const orderFields = `
   price: Float
   country: String
   clients: [Client]
+  created: Float
+  updated: Float
+  timeCost: Float
 }
 `;
 

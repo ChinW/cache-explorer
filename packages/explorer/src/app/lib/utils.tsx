@@ -44,3 +44,20 @@ export const getLocationQuery = (searchString: string): SearchBar.Query => {
   }
   return result;
 };
+
+export const object2Table = (data: any[]): JSX.Element => {
+  return (
+    <table className="border-collapse border-2 border-gray-500">
+      <tbody>
+        {data.map((item) => {
+          return (
+            <tr key={item.name}>
+              <td className="border border-gray-400 px-2 py-1">{item.name}</td>
+              <td className="border border-gray-400 px-2 py-1 text-right">{item.value}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};
