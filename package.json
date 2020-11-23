@@ -7,12 +7,14 @@
     "boot:h": "lerna bootstrap --hoist",
     "dev:stream": "lerna run --scope stream dev",
     "dev:explorer": "lerna run --scope explorer dev",
-    "r:apollo": "lerna run --scope stream m:apollo",
-    "r:stream": "lerna run --scope stream m:stream",
+    "run:apollo": "lerna run --scope stream m:apollo",
+    "run:stream": "lerna run --scope stream m:stream",
     "clean": "lerna clean -y",
     "build:stream": "lerna arun --scope stream build",
     "build:explorer": "lerna arun --scope explorer build",
-    "build": "npm run build:stream && npm run build:explorer"
+    "build": "npm run build:stream && npm run build:explorer",
+    "run:haproxy": "haproxy -f ./haproxy.cfg",
+    "reload:haproxy": ""
   },
   "devDependencies": {
     "lerna": "^3.22.1"
