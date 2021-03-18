@@ -4,7 +4,7 @@ import { childLog } from "shared/src/logger";
 import { Socket } from "./socket";
 
 export class StreamServer {
-  static port = 9999;
+  static port = 9998;
   server: WebSocket.Server;
   socketMap: {[key: string]: WebSocket};
   log = childLog(StreamServer.name);

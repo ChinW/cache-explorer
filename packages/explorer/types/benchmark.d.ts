@@ -8,12 +8,23 @@ declare namespace Benchmark {
 
   interface Props {
     websocket: import("app/lib/cacheWebsocket.ts").CacheWebsocket;
-    data: import('shared/src/types/portableBase').PortableBase[];
-    chart?: import('@antv/g2').Chart;
+    data: Metric[];
+    chart: {
+      cost?: import('@antv/g2').Chart,
+      line?: import('@antv/g2').Chart,
+      [key: name]: import('@antv/g2').Chart
+    };
   }
 
   interface StateAction {
     type: "initData" | "setChart",
     data: any
+  }
+
+  interface Metric {
+    createdAt: number;
+    timeCost: number;
+    positionPct?: number;
+    wrapItems?: number;
   }
 }

@@ -7,6 +7,7 @@
     "dev": "webpack --watch",
     "m:stream": "nodemon --exec \"node -harmony\" --watch ./build/stream.js build/stream.js --env dev",
     "m:apollo": "nodemon --exec \"node -harmony\" --watch ./build/apollo.js build/apollo.js --env dev",
+    "r:stream": "node -harmony build/stream.js",
     "r:apollo": "node -harmony build/apollo.js",
     "build": "webpack"
   },
