@@ -17,10 +17,12 @@
     "@graphql-tools/stitch": "^6.2.4",
     "apollo-datasource": "^0.7.2",
     "apollo-server": "^2.18.2",
+    "google-protobuf": "^3.15.8",
     "graphql": "^15.3.0",
     "graphql-scalars": "^1.4.0",
-    "hazelcast-client": "^4.0.0",
+    "hazelcast-client": "^4.0.2",
     "lodash": "^4.17.19",
+    "protobufjs": "^6.10.2",
     "shared": "^1.0.0",
     "ws": "^7.3.1"
   },

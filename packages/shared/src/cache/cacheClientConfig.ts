@@ -1,6 +1,7 @@
 import { Environment } from "../enums";
 import { ClientConfig } from "hazelcast-client";
 import { PORTABLE_FACTORIES } from "./portableFactory";
+import { OrderBufSerializer } from './orderBufSerializer';
 
 export const getClientConfig = (env: Environment): ClientConfig => {
     const cfg: ClientConfig = {
@@ -8,7 +9,10 @@ export const getClientConfig = (env: Environment): ClientConfig => {
         connectionTimeout: 5000 
       },
       serialization: {
-        portableFactories: PORTABLE_FACTORIES
+        portableFactories: PORTABLE_FACTORIES,
+        customSerializers: [
+          new OrderBufSerializer()
+        ]
       },
       connectionStrategy: {
         asyncStart: false
@@ -18,15 +22,15 @@ export const getClientConfig = (env: Environment): ClientConfig => {
       case Environment.PROD:
       case Environment.QA:
         {
-          cfg.network.clusterMembers = ['localhost:5701'];
-          cfg.clusterName = 'jet';
+          cfg.network.clusterMembers = ['localhost:5501'];
+          cfg.clusterName = 'cache';
         }
         break;
       case Environment.DEV:
         {
           cfg.network.smartRouting = false;
-          cfg.network.clusterMembers = ['localhost:5701'];
-          cfg.clusterName = 'jet';
+          cfg.network.clusterMembers = ['localhost:5501'];
+          cfg.clusterName = 'cache';
         }
         break;
     }

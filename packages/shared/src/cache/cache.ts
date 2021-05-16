@@ -4,6 +4,8 @@ import { getClientConfig } from './cacheClientConfig';
 import { log } from '../logger';
 import { Environment } from '../enums';
 import { PortableBase } from '../types/portableBase';
+// import { OrderMsg } from '../../../proto/order';
+import { CacheType } from '../../../proto/proto';
 
 export class Cache {
   client: Client = null;
@@ -41,7 +43,7 @@ export class Cache {
     return this.client;
   };
 
-  getMap = async (mapName: string): Promise<IMap<string, PortableBase> | null> => {
+  getMap = async (mapName: string): Promise<IMap<string, any> | null> => {
     try {
       if (mapName.length > 0) {
         const instance = await this.getClient();
@@ -55,13 +57,22 @@ export class Cache {
     }
   };
 
-  getValues = async (mapName: string, filter: string): Promise<Array<PortableBase>> => {
+  getValues = async (mapName: string, filter: string): Promise<Array<any>> => {
     try {
       const map = await this.getMap(mapName);
-      const values: ReadOnlyLazyList<PortableBase> =
+      if (mapName === "OrderMsg") {
+        const values: ReadOnlyLazyList<CacheType.OrderMsg> =
+          filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
+        const results = values.toArray();
+        console.log(results[0].toJSON())
+        return results;
+      } else {
+        const values: ReadOnlyLazyList<PortableBase> =
         filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
-      const results = values.toArray();
-      return results;
+        const results = values.toArray();
+        return results;
+      }
+     
     } catch (err) {
       log.error('Failure in getValues: %s', err);
       return [];

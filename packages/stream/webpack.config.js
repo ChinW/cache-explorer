@@ -14,8 +14,9 @@ module.exports = {
       {
         test: /\.(j|t)sx?$/,
         include: [
-          path.resolve(__dirname, './src/')
-          , path.resolve(__dirname, '../shared/')
+          path.resolve(__dirname, './src/'),
+          path.resolve(__dirname, '../shared/'),
+          path.resolve(__dirname, '../proto/')
         ],
         exclude: /node_modules/,
         use: {

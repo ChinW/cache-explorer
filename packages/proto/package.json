@@ -1,0 +1,21 @@
+{
+  "name": "proto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "protoc -I=./src --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./ --ts_proto_opt=esModuleInterop=true ./src/order.proto",
+    "build:jts": "protoc -I=./src --plugin=\"proto-gen-ts=./node_modules/.bin/ts-protoc-gen\" --js_out=\"import_style=commonjs,binary:./\" --ts_out=./ ./src/*.proto",
+    "build:pbjs": "./node_modules/.bin/pbjs -t static-module --keep-case -w commonjs -o proto.js ./src/*",
+    "build:pbts": "./node_modules/.bin/pbts -o proto.d.ts proto.js",
+    "build:pb": "npm run build:pbjs && npm run build:pbts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "protobufjs": "^6.11.2",
+    "ts-proto": "^1.79.7",
+    "ts-protoc-gen": "^0.15.0"
+  }
+}
