@@ -1,26 +1,21 @@
 import { Cache } from 'shared/src/cache/cache';
 import { CacheMap } from 'shared/src/cache/cacheMap';
+import { OrderMutationEntryProcessor } from 'shared/src/cache/entryProcessor';
 import { Environment } from 'shared/src/enums';
 import { CacheType } from '../../../proto/proto';
 import { StreamServer } from './streamServer';
 
-
-export const playground = () => {
-  const order = new CacheType.OrderMsg();
-  console.log('order', Object.keys(CacheType.OrderMsg))
-  console.log('order', new CacheType.OrderMsg())
-}
-
 export const start = async () => {
   // const server = new StreamServer();
   const cache = new Cache(Environment.DEV);
-  const values = await cache.getValues(CacheMap.OrderMsg.name, '');
+  const map = await cache.getMap(CacheMap.OrderMsg.name);
+  map.executeOnKey('1', new OrderMutationEntryProcessor(99));
   // const values = await (await map.values()).toArray();
-  console.log('values', values.length)
+  console.log('values', await map.get('1'))
   // if(values.length > 0) {
   //   console.log(values[0].toJSON())
   // }
 };
 
-playground();
+start();
 // cacheReadPerfTest();

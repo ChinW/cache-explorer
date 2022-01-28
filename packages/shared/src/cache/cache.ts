@@ -6,6 +6,7 @@ import { Environment } from '../enums';
 import { PortableBase } from '../types/portableBase';
 // import { OrderMsg } from '../../../proto/order';
 import { CacheType } from '../../../proto/proto';
+import { CacheMap } from './cacheMap';
 
 export class Cache {
   client: Client = null;
@@ -60,19 +61,18 @@ export class Cache {
   getValues = async (mapName: string, filter: string): Promise<Array<any>> => {
     try {
       const map = await this.getMap(mapName);
-      if (mapName === "OrderMsg") {
+      console.log(await map.size());
+      if (mapName === CacheMap.OrderMsg.name) {
         const values: ReadOnlyLazyList<CacheType.OrderMsg> =
           filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
         const results = values.toArray();
-        console.log(results[0].toJSON())
         return results;
       } else {
         const values: ReadOnlyLazyList<PortableBase> =
-        filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
+          filter.length > 0 ? await map.valuesWithPredicate(Predicates.sql(filter)) : await map.values();
         const results = values.toArray();
         return results;
       }
-     
     } catch (err) {
       log.error('Failure in getValues: %s', err);
       return [];
